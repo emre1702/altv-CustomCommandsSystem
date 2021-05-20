@@ -27,18 +27,6 @@ namespace CustomCommandSystem.Common.Datas
             [typeof(ushort)] = (1, (player, args, cancelErrorMsgOnFail) => ushort.Parse(args[0])),
             [typeof(string)] = (1, (player, args, cancelErrorMsgOnFail) => args[0]),
 
-            [typeof(GTANetworkAPI.Player)] = (1, (player, args, cancelErrorMsgOnFail) => 
-            {
-                GTANetworkAPI.Player? target = null;
-                GTANetworkAPI.NAPI.Task.Run(() => target = GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
-                GTANetworkAPI.NAPI.Task.WaitForMainThread();
-                if (target is null && PlayerNotFoundErrorMessage is { })
-                {
-                    cancelErrorMsgOnFail.Cancel = true;
-                    GTANetworkAPI.NAPI.Task.Run(() => player.SendChatMessage(PlayerNotFoundErrorMessage));
-                }
-                return target;
-            }),
             [typeof(GTANetworkAPI.Vector3)] = (3, (player, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Vector3(ParseDouble(args[0]), ParseDouble(args[1]), ParseDouble(args[2]))),
             [typeof(GTANetworkAPI.Color)] = (3, (player, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Color(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
             [typeof(GTANetworkAPI.ComponentVariation)] = (3, (player, args, cancelErrorMsgOnFail) => new GTANetworkAPI.ComponentVariation(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
@@ -65,6 +53,26 @@ namespace CustomCommandSystem.Common.Datas
             [typeof(GTANetworkAPI.Quaternion)] = (4, (player, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Quaternion(ParseDouble(args[0]), ParseDouble(args[1]), ParseDouble(args[2]), ParseDouble(args[3]))),
             [typeof(GTANetworkAPI.VehiclePaint)] = (2, (player, args, cancelErrorMsgOnFail) => new GTANetworkAPI.VehiclePaint(int.Parse(args[0]), int.Parse(args[1]))),
         };
+
+        public static Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)> AsyncData { get; }
+            = new Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)>
+        {
+            [typeof(GTANetworkAPI.Player)] = (1, async (player, args, cancelErrorMsgOnFail) =>
+            {
+                GTANetworkAPI.Player? target = null;
+                GTANetworkAPI.NAPI.Task.Run(() => target = GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
+                await GTANetworkAPI.NAPI.Task.WaitForMainThread();
+                if (target is null && PlayerNotFoundErrorMessage is { })
+                {
+                    cancelErrorMsgOnFail.Cancel = true;
+                    GTANetworkAPI.NAPI.Task.Run(() => player.SendChatMessage(PlayerNotFoundErrorMessage));
+                }
+                return target;
+            }
+            ),
+        };
+
+                
 
         private static bool ParseBool(string val) 
             => val.ToLower() switch

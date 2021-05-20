@@ -16,7 +16,7 @@ namespace CustomCommandSystem.Services.Parser
         internal static ArgumentsConverter Instance { get; private set; }
 #nullable restore
 
-        private readonly Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)> _asyncConverters = new Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)>();
+        private readonly Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)> _asyncConverters = DefaultConverters.AsyncData;
         private readonly Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> _converters = DefaultConverters.Data;
         
 
