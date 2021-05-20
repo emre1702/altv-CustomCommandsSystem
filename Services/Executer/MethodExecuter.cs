@@ -43,10 +43,11 @@ namespace CustomCommandSystem.Services.Executer
             BeforeCommandExecute?.Invoke(player, cmd, args, cancel);
             if (cancel.Cancel) return true;
 
-            if (suitableMethodInfo.MethodData.FastInvokeHandler is FastInvokeHandler nonStaticHandler)
-                nonStaticHandler.Invoke(suitableMethodInfo.MethodData.Instance, args);
-            else if (suitableMethodInfo.MethodData.FastInvokeHandler is FastInvokeHandlerStatic staticHandler)
-                staticHandler.Invoke(args);
+            if (_configuration.RunCommandMethodInMainThread)
+                RunSync(suitableMethodInfo.MethodData, args);
+            else 
+                Run(suitableMethodInfo.MethodData, args);
+           
 
             AfterCommandExecute?.Invoke(player, cmd, args);
             return true;
@@ -88,6 +89,25 @@ namespace CustomCommandSystem.Services.Executer
                 if (!checker.CanExecute(player, customCommandInfo, args))
                     return false;
             return true;
+        }
+
+        private void RunSync(CommandMethodData methodData, object?[] args)
+        {
+            NAPI.Task.Run(() =>
+            {
+                if (methodData.FastInvokeHandler is FastInvokeHandler nonStaticHandler)
+                    nonStaticHandler.Invoke(methodData.Instance, args);
+                else if (methodData.FastInvokeHandler is FastInvokeHandlerStatic staticHandler)
+                    staticHandler.Invoke(args);
+            });
+        }
+
+        private void Run(CommandMethodData methodData, object?[] args)
+        {
+            if (methodData.FastInvokeHandler is FastInvokeHandler nonStaticHandler)
+                nonStaticHandler.Invoke(methodData.Instance, args);
+            else if (methodData.FastInvokeHandler is FastInvokeHandlerStatic staticHandler)
+                staticHandler.Invoke(args);
         }
     }
 }

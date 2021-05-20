@@ -33,7 +33,7 @@ namespace CustomCommandSystem.Tests.Services.Executer
             methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             _methodParser = new MethodParser(methodsLoader);
             var argumentsParser = new ArgumentsParser(argumentsConverter);
-            _methodExecuter = new MethodExecuter(argumentsParser, new CommandsConfiguration());
+            _methodExecuter = new MethodExecuter(argumentsParser, new CommandsConfiguration { RunCommandMethodInMainThread = false });
         }
 
         [OneTimeTearDown]

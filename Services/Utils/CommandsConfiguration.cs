@@ -20,6 +20,7 @@ namespace CustomCommandSystem.Services.Utils
                 DefaultConverters.PlayerNotFoundErrorMessage = value;
             }
         }
+        public bool RunCommandMethodInMainThread { get; set; } = true;
 
         private string? _playerNotFoundErrorMessage = "A player with that name could not be found.";
 

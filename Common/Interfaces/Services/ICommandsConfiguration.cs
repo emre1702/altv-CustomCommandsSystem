@@ -25,5 +25,11 @@
         ///     Set <see langword="null"/> if you want to disable it.
         /// </summary>
         string? CommandWithTheseArgsDoesNotExistError { get; set; }
+
+        /// <summary>
+        ///     Set this to false if you don't want the command method to be executed in NAPI.Task.Run (in main thread).
+        ///     Has propably no effect if the command method is async.
+        /// </summary>
+        bool RunCommandMethodInMainThread { get; set; }
     }
 }
