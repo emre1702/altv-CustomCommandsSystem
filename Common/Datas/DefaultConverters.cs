@@ -23,6 +23,7 @@ namespace CustomCommandSystem.Common.Datas
             [typeof(ushort)] = (1, args => ushort.Parse(args[0])),
             [typeof(string)] = (1, args => args[0]),
 
+            [typeof(GTANetworkAPI.Player)] = (1, args => GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0])),
             [typeof(GTANetworkAPI.Vector3)] = (3, args => new GTANetworkAPI.Vector3(ParseDouble(args[0]), ParseDouble(args[1]), ParseDouble(args[2]))),
             [typeof(GTANetworkAPI.Color)] = (3, args => new GTANetworkAPI.Color(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
             [typeof(GTANetworkAPI.ComponentVariation)] = (3, args => new GTANetworkAPI.ComponentVariation(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
