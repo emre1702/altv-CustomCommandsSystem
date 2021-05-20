@@ -1,6 +1,6 @@
 <p align="center">
   <h2 align="center">RAGE:MP Custom Command System</h2>
-  <p align="center">A custom command system for RAGE:MP.</p>
+  <p align="center">A custom command system for RAGE:MP, written in C#.</p>
 </p>
 
 
