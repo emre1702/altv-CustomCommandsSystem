@@ -1,0 +1,17 @@
+﻿<Commands>
+  <Command value="Kick">
+    <Aliases>
+      <Alias>RKick</Alias>
+      <Alias>Yeet</Alias>
+      <Alias>KickHisAss</Alias>
+    </Aliases>
+    <Hidden>true</Hidden>
+  </Command>
+
+  <Command value="Say">
+    <Aliases>
+      <Alias>Talk</Alias>
+    </Aliases>
+    <Hidden>false</Hidden>
+  </Command>
+</Commands>
