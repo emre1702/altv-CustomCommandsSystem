@@ -8,7 +8,7 @@ namespace CustomCommandSystem.Common.Attributes
     /// Override this attribute with your custom attribute to add custom requirements/checks before a command gets executed.<br/>
     /// E.g. add a "RequiresAdminLevel(int adminLevel)" attribute which overrides this and return false in CanExecute, if the player has a lower admin level.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
     public abstract class CustomCommandRequirementBaseAttribute : Attribute
     {
         /// <summary>

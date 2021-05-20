@@ -34,7 +34,7 @@ namespace CustomCommandSystem.Common.Models
             IsCommandInfoRequired = GetIsCommandInfoRequired(method);
 
             Aliases = method.GetCustomAttributes<CustomCommandAliasAttribute>().SelectMany(a => a.Aliases).ToArray();
-            RequirementCheckers = method.GetCustomAttributes().OfType<CustomCommandRequirementBaseAttribute>().ToArray();
+            RequirementCheckers = method.GetCustomAttributes().Union(method.DeclaringType!.GetCustomAttributes()).OfType<CustomCommandRequirementBaseAttribute>().ToArray();
         }
 
         internal void CompleteInitialization()
