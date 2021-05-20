@@ -7,6 +7,7 @@ namespace CustomCommandSystem.Common.Models
         public int UserInputLength { get; set; }
         public object? DefaultValue { get; internal set; }
         public bool IsRemainingText { get; internal set; }
+        public bool IsNullable { get; internal set; }
 #nullable disable
         public Type Type { get; internal set; }
 #nullable enable

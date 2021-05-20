@@ -99,6 +99,7 @@ namespace CustomCommandSystem.Services.Loader
                     UserInputLength = GetUserInputAmountForArg(parameter),
                     DefaultValue = parameter.DefaultValue,
                     IsRemainingText = IsRemainingText(parameter),
+                    IsNullable = IsNullable(parameter),
                     Type = parameter.ParameterType
                 };
                 yield return parameterData;
@@ -151,6 +152,9 @@ namespace CustomCommandSystem.Services.Loader
 
         private bool IsRemainingText(ParameterInfo parameter)
             => parameter.GetCustomAttribute<CustomCommandRemainingTextAttribute>() != null;
+
+        private bool IsNullable(ParameterInfo parameter)
+            => Nullable.GetUnderlyingType(parameter.ParameterType) != null;
 
         private void SortMethodDatasByPriority()
         {

@@ -16,7 +16,7 @@ namespace CustomCommandSystem.Services.Parser
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
             => remainingMessageWithoutCmd.Split(' ');
 
-        public async IAsyncEnumerable<object> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs)
+        public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs)
         {
             yield return player;
             if (commandMethodData.IsCommandInfoRequired)
@@ -39,6 +39,7 @@ namespace CustomCommandSystem.Services.Parser
                 else
                 {
                     var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(userArgs, userArgIndex, methodParameter.Type);
+                    if (convertedArg is null && !methodParameter.IsNullable) throw new Exception(); 
                     yield return convertedArg;
                     userArgIndex += amountArgsUsed;
                 }
