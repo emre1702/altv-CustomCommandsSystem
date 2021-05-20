@@ -29,7 +29,9 @@ namespace CustomCommandSystem.Common.Datas
 
             [typeof(GTANetworkAPI.Player)] = (1, (player, args, cancelErrorMsgOnFail) => 
             {
-                var target = GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]);
+                GTANetworkAPI.Player? target = null;
+                GTANetworkAPI.NAPI.Task.Run(() => target = GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
+                GTANetworkAPI.NAPI.Task.WaitForMainThread();
                 if (target is null && PlayerNotFoundErrorMessage is { })
                 {
                     cancelErrorMsgOnFail.Cancel = true;
