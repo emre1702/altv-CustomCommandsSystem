@@ -20,10 +20,11 @@ namespace CustomCommandSystem.Integration
         /// </summary>
         public static event AfterCommandExecuteDelegate? AfterCommandExecute;
 
-        internal static void OnBeforeCommandExecute(Player player, string cmd, object[] args, CancelEventArgs cancelEventArgs)
+        internal static void OnBeforeCommandExecute(Player player, string cmd, object?[] args, CancelEventArgs cancelEventArgs)
             => BeforeCommandExecute?.Invoke(player, cmd, args, cancelEventArgs);
 
-        internal static void OnAfterCommandExecute(Player player, string cmd, object[] args)
+        internal static void OnAfterCommandExecute(Player player, string cmd, object?[] args)
             => AfterCommandExecute?.Invoke(player, cmd, args);
     }
 }
+

@@ -1,4 +1,5 @@
 ﻿using CustomCommandSystem.Common.Delegates;
+using GTANetworkAPI;
 using System;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace CustomCommandSystem.Common.Interfaces.Services
     {
         event EmptyDelegate? ConverterChanged;
 
-        ValueTask<(object ConvertedValue, int AmountArgsUsed)> Convert(string[] userArgs, int atIndex, Type toType);
-        void SetAsyncConverter(Type forType, int argumentsLength, Func<ArraySegment<string>, Task<object>> asyncConverter);
-        void SetConverter(Type forType, int argumentsLength, Func<ArraySegment<string>, object> converter);
+        ValueTask<(object? ConvertedValue, int AmountArgsUsed)> Convert(Player player, string[] userArgs, int atIndex, Type toType, CancelEventArgs errorMessageCancel);
+        void SetAsyncConverter(Type forType, int argumentsLength, AsyncConverterDelegate asyncConverter);
+        void SetConverter(Type forType, int argumentsLength, ConverterDelegate converter);
         internal int? GetTypeArgumentsLength(Type type); 
     }
 }

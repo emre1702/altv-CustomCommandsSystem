@@ -21,7 +21,7 @@ namespace CustomCommandSystem.Common.Attributes
         ///     Example: "/kick Player1" => methodArgs will only contain Player1
         /// </param>
         /// <returns>If the requirement was met. Returning false will cancel the execution, BeforeCommandExecute will not be triggered.</returns>
-        public abstract bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object> methodArgs);
+        public abstract bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object?> methodArgs);
     }
 }
  

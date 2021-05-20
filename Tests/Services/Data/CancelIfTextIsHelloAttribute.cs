@@ -7,7 +7,7 @@ namespace CustomCommandSystem.Tests.Services.Data
 {
     class CancelIfTextIsHelloAttribute : CustomCommandRequirementBaseAttribute
     {
-        public override bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object> methodArgs)
-            => methodArgs[0].ToString() != "Hello";
+        public override bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object?> methodArgs)
+            => methodArgs[0]!.ToString() != "Hello";
     }
 }

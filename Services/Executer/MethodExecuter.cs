@@ -28,7 +28,7 @@ namespace CustomCommandSystem.Services.Executer
             var suitableMethodInfo = await GetSuitableMethodInfo(player, possibleMethods, userArguments);
             if (suitableMethodInfo.MethodData is null)
             {
-                if (suitableMethodInfo.FailedButExceptionOccured && _configuration.CommandUsedIncorrectly is { })
+                if (suitableMethodInfo.OutputCommandUsedWrongIfNoneFound && _configuration.CommandUsedIncorrectly is { })
                     NAPI.Task.Run(() => player.SendChatMessage(_configuration.CommandUsedIncorrectly));
                 else if (_configuration.CommandDoesNotExistError is { })
                     NAPI.Task.Run(() => player.SendChatMessage(_configuration.CommandDoesNotExistError));
@@ -54,7 +54,7 @@ namespace CustomCommandSystem.Services.Executer
 
         private async Task<SuitableMethodInfo> GetSuitableMethodInfo(Player player, List<CommandMethodData> possibleMethods, string[] userArguments)
         {
-            var exceptionOccuredOnce = false;
+            var outputCommandUsedWrongIfNoneFound = false;
             foreach (var possibleMethod in possibleMethods)
             {
                 try
@@ -64,25 +64,26 @@ namespace CustomCommandSystem.Services.Executer
                         return new SuitableMethodInfo
                         {
                             ConvertedArgs = convertedArgs,
-                            FailedButExceptionOccured = false,
+                            OutputCommandUsedWrongIfNoneFound = false,
                             MethodData = possibleMethod
                         };
                 }
-                catch
+                catch (ArgumentException) { }
+                catch (Exception)
                 {
-                    exceptionOccuredOnce = true;
+                    outputCommandUsedWrongIfNoneFound = true;
                 }
             }
 
-            return new SuitableMethodInfo { FailedButExceptionOccured = exceptionOccuredOnce };
+            return new SuitableMethodInfo { OutputCommandUsedWrongIfNoneFound = outputCommandUsedWrongIfNoneFound };
         }
 
-        private bool AreCustomRequirementsMet(CommandMethodData methodData, Player player, object[] methodArgs)
+        private bool AreCustomRequirementsMet(CommandMethodData methodData, Player player, object?[] methodArgs)
         {
             if (methodData.RequirementCheckers.Length == 0) return true;
 
-            CustomCommandInfo? customCommandInfo = methodData.IsCommandInfoRequired ? (CustomCommandInfo)methodArgs[methodData.UserParametersStartIndex - 1] : null;
-            var args = new ArraySegment<object>(methodArgs, methodData.UserParametersStartIndex, methodArgs.Length - methodData.UserParametersStartIndex);
+            CustomCommandInfo? customCommandInfo = methodData.IsCommandInfoRequired ? (CustomCommandInfo)methodArgs[methodData.UserParametersStartIndex - 1]! : null;
+            var args = new ArraySegment<object?>(methodArgs, methodData.UserParametersStartIndex, methodArgs.Length - methodData.UserParametersStartIndex);
             foreach (var checker in methodData.RequirementCheckers)
                 if (!checker.CanExecute(player, customCommandInfo, args))
                     return false;

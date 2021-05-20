@@ -63,7 +63,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
             Assert.AreEqual(2.23, vector3.Y, 0.001);
             Assert.AreEqual(123, vector3.Z, 0.001);
             Assert.AreEqual(true, invokeArgs[3 + amountDefaultArgs]);
-            Assert.AreEqual(12.412, (float)invokeArgs[4 + amountDefaultArgs], 0.001);
+            Assert.AreEqual(12.412, (float)invokeArgs[4 + amountDefaultArgs]!, 0.001);
             Assert.AreEqual(423, invokeArgs[5 + amountDefaultArgs]);
         }
     }

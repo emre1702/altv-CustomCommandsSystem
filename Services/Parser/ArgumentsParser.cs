@@ -22,6 +22,7 @@ namespace CustomCommandSystem.Services.Parser
             if (commandMethodData.IsCommandInfoRequired)
                 yield return new CustomCommandInfo();
 
+            var cmdErrorOnNullCancel = new CancelEventArgs();
             var methodParameters = commandMethodData.UserParameters;
             for (int methodParamIndex = 0, userArgIndex = 0; methodParamIndex < methodParameters.Count; ++methodParamIndex)
             {
@@ -38,8 +39,15 @@ namespace CustomCommandSystem.Services.Parser
                 }
                 else
                 {
-                    var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(userArgs, userArgIndex, methodParameter.Type);
-                    if (convertedArg is null && !methodParameter.IsNullable) throw new Exception(); 
+                    var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(player, userArgs, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
+                    if (convertedArg is null && !methodParameter.IsNullable) 
+                    {
+                        if (cmdErrorOnNullCancel.Cancel)
+                            throw new ArgumentException();
+                        else
+                            throw new Exception();
+                    }
+                    cmdErrorOnNullCancel.Cancel = false;
                     yield return convertedArg;
                     userArgIndex += amountArgsUsed;
                 }

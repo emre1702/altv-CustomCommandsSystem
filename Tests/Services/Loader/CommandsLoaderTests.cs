@@ -31,7 +31,7 @@ namespace CustomCommandSystem.Tests.Services.Loader
             _commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             var commandMethods = _commandsLoader.GetCommandDatas();
 
-            Assert.AreEqual(10, commandMethods.Keys.Count);
+            Assert.AreEqual(11, commandMethods.Keys.Count);
             Assert.AreEqual(17, commandMethods.Values.SelectMany(v => v.Methods).Distinct().Count());
         }
 

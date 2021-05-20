@@ -42,7 +42,7 @@ namespace CustomCommandSystem.Tests.Services
             _commandsHandler = new CommandsHandler(cleaner, commandParser, argumentsParser, commandsLoader, methodExecuter, methodParser, configuration);
 
             commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
-            argumentsConverter.SetConverter(typeof(OutputTestModel), 2, args => new OutputTestModel { Id = int.Parse(args[0]), AnyString = args[1] });
+            argumentsConverter.SetConverter(typeof(OutputTestModel), 2, (player, args, cancel) => new OutputTestModel { Id = int.Parse(args[0]), AnyString = args[1] });
         }
 
         [OneTimeTearDown]

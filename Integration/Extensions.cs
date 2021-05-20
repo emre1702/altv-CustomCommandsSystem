@@ -1,4 +1,5 @@
-﻿using CustomCommandSystem.Services;
+﻿using CustomCommandSystem.Common.Delegates;
+using CustomCommandSystem.Services;
 using CustomCommandSystem.Services.Loader;
 using CustomCommandSystem.Services.Parser;
 using GTANetworkMethods;
@@ -72,9 +73,10 @@ namespace CustomCommandSystem.Integration
         /// <param name="converter">
         ///     The function to convert the arguments to the type you want to have.<br/> 
         ///     The <see cref="ArraySegment{T}"/> of <see cref="string"/> exactly contains the arguments (length = <paramref name="amountArgumentsNeeded"/>) used for this type.<br/>
-        ///     Return of the converter needs to be of type <typeparamref name="T"/>.
+        ///     Return of the converter needs to be of type <typeparamref name="T"/>
+        ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetConverter<T>(this Command _, int amountArgumentsNeeded, Func<ArraySegment<string>, object> converter)
+        public static void SetConverter<T>(this Command _, int amountArgumentsNeeded, ConverterDelegate converter)
           => ArgumentsConverter.Instance.SetConverter(typeof(T), amountArgumentsNeeded, converter);
 
         /// <summary>
@@ -86,8 +88,9 @@ namespace CustomCommandSystem.Integration
         ///     The function to convert the arguments to the type you want to have.<br/> 
         ///     The <see cref="ArraySegment{T}"/> of <see cref="string"/> exactly contains the arguments (length = <paramref name="amountArgumentsNeeded"/>) used for this type.<br/>
         ///     Return of the converter needs to be of type <see cref="Task{T}" /> of <typeparamref name="T"/>.
+        ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetAsyncConverter<T>(this Command _, int amountArgumentsNeeded, Func<ArraySegment<string>, Task<object>> asyncConverter)
+        public static void SetAsyncConverter<T>(this Command _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter)
           => ArgumentsConverter.Instance.SetAsyncConverter(typeof(T), amountArgumentsNeeded, asyncConverter);
 
         /// <summary>
