@@ -20,7 +20,8 @@
 * Add aliases to command methods
 * Remaining text support
 * Default values for command parameters support  
-* You can help decide what to implement next.  
+* Really fast with IL generated dynamic method
+* You can help decide what to implement next 
   
 You want more? Add an [issue](https://github.com/emre1702/RAGEMP-CustomCommandSystem/issues) and help make that system better!
   
