@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RAGEMP-CustomCommandsSystem</id>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <title>Custom commands system for RAGE:MP</title>
     <authors>Bonus (emre1702)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
