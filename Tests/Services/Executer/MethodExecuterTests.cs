@@ -26,6 +26,8 @@ namespace CustomCommandSystem.Tests.Services.Executer
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
+            NapiTaskExtensions.InTest = true;
+
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = Substitute.For<ILogger>();
             var argumentsConverter = new ArgumentsConverter();

@@ -1,6 +1,5 @@
-﻿using CustomCommandSystem.Common;
-using CustomCommandSystem.Common.Datas;
-using CustomCommandSystem.Common.Delegates;
+﻿using CustomCommandSystem.Common.Delegates;
+using CustomCommandSystem.Common.Extensions;
 using CustomCommandSystem.Common.Interfaces.Services;
 using CustomCommandSystem.Common.Models;
 using CustomCommandSystem.Services.Utils;
@@ -37,7 +36,7 @@ namespace CustomCommandSystem.Services.Executer
 
             var args = suitableMethodInfo.ConvertedArgs ?? Array.Empty<object>();
 
-            if (!AreCustomRequirementsMet(suitableMethodInfo.MethodData, player, args)) return true;
+            if (!await AreCustomRequirementsMet(suitableMethodInfo.MethodData, player, args)) return true;
 
             var cancel = new CancelEventArgs();
             BeforeCommandExecute?.Invoke(player, cmd, args, cancel);
@@ -45,9 +44,9 @@ namespace CustomCommandSystem.Services.Executer
 
             if (_configuration.RunCommandMethodInMainThread)
                 RunSync(suitableMethodInfo.MethodData, args);
-            else 
+            else
                 Run(suitableMethodInfo.MethodData, args);
-           
+
 
             AfterCommandExecute?.Invoke(player, cmd, args);
             return true;
@@ -79,16 +78,22 @@ namespace CustomCommandSystem.Services.Executer
             return new SuitableMethodInfo { OutputCommandUsedWrongIfNoneFound = outputCommandUsedWrongIfNoneFound };
         }
 
-        private bool AreCustomRequirementsMet(CommandMethodData methodData, Player player, object?[] methodArgs)
+        private async Task<bool> AreCustomRequirementsMet(CommandMethodData methodData, Player player, object?[] methodArgs)
         {
             if (methodData.RequirementCheckers.Length == 0) return true;
 
             CustomCommandInfo? customCommandInfo = methodData.IsCommandInfoRequired ? (CustomCommandInfo)methodArgs[methodData.UserParametersStartIndex - 1]! : null;
             var args = new ArraySegment<object?>(methodArgs, methodData.UserParametersStartIndex, methodArgs.Length - methodData.UserParametersStartIndex);
-            foreach (var checker in methodData.RequirementCheckers)
-                if (!checker.CanExecute(player, customCommandInfo, args))
-                    return false;
-            return true;
+
+            bool worked = await NAPI.Task.RunWait(() =>
+            {
+                foreach (var checker in methodData.RequirementCheckers)
+                    if (!checker.CanExecute(player, customCommandInfo, args))
+                        return false;
+                return true;
+            });
+
+            return worked;
         }
 
         private void RunSync(CommandMethodData methodData, object?[] args)

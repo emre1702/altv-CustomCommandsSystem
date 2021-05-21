@@ -1,4 +1,5 @@
 ﻿using CustomCommandSystem.Common.Delegates;
+using CustomCommandSystem.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -59,9 +60,7 @@ namespace CustomCommandSystem.Common.Datas
         {
             [typeof(GTANetworkAPI.Player)] = (1, async (player, args, cancelErrorMsgOnFail) =>
             {
-                GTANetworkAPI.Player? target = null;
-                GTANetworkAPI.NAPI.Task.Run(() => target = GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
-                await GTANetworkAPI.NAPI.Task.WaitForMainThread();
+                var target = await GTANetworkAPI.NAPI.Task.RunWait(() => GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
                 if (target is null && PlayerNotFoundErrorMessage is { })
                 {
                     cancelErrorMsgOnFail.Cancel = true;

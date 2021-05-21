@@ -28,7 +28,7 @@ namespace CustomCommandSystem.Tests.Services
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var configuration = new CommandsConfiguration();
+            var configuration = new CommandsConfiguration { RunCommandMethodInMainThread = false };
             _player = new Player(new NetHandle());
             var cleaner = new MessageCleaner(configuration);
             var commandParser = new CommandParser();
