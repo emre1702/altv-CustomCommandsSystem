@@ -3,7 +3,9 @@
   <p align="center">A custom commands system for RAGE:MP, written in C#.</p>
 </p>
 <p align="center">
-  <img alt="Nuget" src="https://img.shields.io/nuget/v/RAGEMP-CustomCommandsSystem?style=for-the-badge">
+  <a href="https://www.nuget.org/packages/RAGEMP-CustomCommandsSystem/">
+    <img alt="Nuget" src="https://img.shields.io/nuget/v/RAGEMP-CustomCommandsSystem?style=for-the-badge">
+  </a>
 </p>
 
 
