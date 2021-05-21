@@ -28,7 +28,7 @@ You want more? Add an [issue](https://github.com/emre1702/RAGEMP-CustomCommandSy
   
 ## How do I use it?
 
-1. Install the NuGet package (url coming soon)
+1. Install the [NuGet package](https://www.nuget.org/packages/RAGEMP-CustomCommandsSystem/) 
 2. [Use this code at clientside](https://github.com/emre1702/RAGEMP-CustomCommandSystem/blob/master/Integration_Client/CommandFetcher.cs).  
 The code there cancels the default command and triggers the custom command.
 3. Implement it. Use the [Wiki](https://github.com/emre1702/RAGEMP-CustomCommandSystem/wiki) for information.
