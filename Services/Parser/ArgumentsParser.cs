@@ -14,7 +14,7 @@ namespace CustomCommandSystem.Services.Parser
             => _argumentsConverter = argumentsConverter;
 
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
-            => remainingMessageWithoutCmd.Split(' ');
+            => String.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
 
         public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs)
         {
