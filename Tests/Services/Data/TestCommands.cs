@@ -128,6 +128,13 @@ namespace CustomCommandSystem.Tests.Services.Data
             Console.Write($"Output 3 {model.Id} {model.AnyString}");
         }
 
+        [CustomCommand("output", 1)]
+        [CustomCommandAlias("console", "ConsoleOutput")]
+        public void Output()
+        {
+            Console.Write("Output empty called");
+        }
+
         public class OutputTestModel
         {
             public int Id { get; set; }

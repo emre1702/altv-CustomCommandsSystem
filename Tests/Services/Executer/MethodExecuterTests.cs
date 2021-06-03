@@ -71,10 +71,11 @@ namespace CustomCommandSystem.Tests.Services.Executer
         [TestCase("output", "Hello", ExpectedResult = "Output 1 Hello")]
         [TestCase("outputCancel", "Hello", ExpectedResult = "")]
         [TestCase("outputCancel", "NotHello", ExpectedResult = "OutputCancel 1 NotHello")]
+        [TestCase("Output", "", ExpectedResult = "Output empty called")]
         public async Task<string> TryExecuteSuitable_ChecksRequirementAttribute(string cmd, string arg)
         {
             var player = new Player(new NetHandle());
-            var args = new string[] { arg };
+            var args = arg.Length > 0 ? new string[] { arg } : new string[0];
             var methods = _methodParser.GetPossibleMethods(cmd, args);
 
             var result = await _methodExecuter.TryExecuteSuitable(player, cmd, methods.ToList(), args);

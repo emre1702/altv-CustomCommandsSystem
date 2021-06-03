@@ -63,6 +63,7 @@ namespace CustomCommandSystem.Tests.Services
         [TestCase("/output test test test test", ExpectedResult = "Output 1 test test test test")]
         [TestCase("/console 5 test test test", ExpectedResult = "Output 2 5 test test test")]
         [TestCase("/ConsoleOutput 5 test", ExpectedResult = "Output 3 5 test")]
+        [TestCase("/ConsoleOutput", ExpectedResult = "Output empty called")]
         public string ExecuteCommand_TestCommandsWork(string cmd)
         {
             _commandsHandler.ExecuteCommand(_player, cmd);
