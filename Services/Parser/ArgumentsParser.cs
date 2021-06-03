@@ -14,11 +14,12 @@ namespace CustomCommandSystem.Services.Parser
             => _argumentsConverter = argumentsConverter;
 
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
-            => String.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
+            => string.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
 
         public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs)
         {
-            yield return player;
+            if (commandMethodData.IsPlayerRequired)
+                yield return player;
             if (commandMethodData.IsCommandInfoRequired)
                 yield return new CustomCommandInfo();
 
@@ -29,8 +30,12 @@ namespace CustomCommandSystem.Services.Parser
                 var methodParameter = methodParameters[methodParamIndex];
                 if (userArgIndex >= userArgs.Length)
                 {
-                    yield return methodParameter.DefaultValue!;
-                    ++userArgIndex;
+                    if (methodParameter.HasDefaultValue)
+                    {
+                        yield return methodParameter.DefaultValue;
+                        ++userArgIndex;
+                    }
+                    else ThrowError(cmdErrorOnNullCancel);
                 }
                 else if (methodParameter.IsRemainingText)
                 {
@@ -40,18 +45,21 @@ namespace CustomCommandSystem.Services.Parser
                 else
                 {
                     var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(player, userArgs, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
-                    if (convertedArg is null && !methodParameter.IsNullable) 
-                    {
-                        if (cmdErrorOnNullCancel.Cancel)
-                            throw new ArgumentException();
-                        else
-                            throw new Exception();
-                    }
+                    if (convertedArg is null && !methodParameter.IsNullable)
+                        ThrowError(cmdErrorOnNullCancel);
                     cmdErrorOnNullCancel.Cancel = false;
                     yield return convertedArg;
                     userArgIndex += amountArgsUsed;
                 }
             }
+        }
+
+        private void ThrowError(CancelEventArgs cmdErrorOnNullCancel)
+        {
+            if (cmdErrorOnNullCancel.Cancel)
+                throw new ArgumentException();
+            else 
+                throw new Exception();
         }
     }
 }

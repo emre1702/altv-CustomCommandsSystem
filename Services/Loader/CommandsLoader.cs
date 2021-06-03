@@ -55,7 +55,7 @@ namespace CustomCommandSystem.Services.Loader
         private IEnumerable<MethodInfo> GetCommandMethods(Assembly assembly)
             => assembly.GetTypes().SelectMany(type => type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic)
-               .Where(m => m.GetCustomAttribute<CustomCommandAttribute>(false) != null));
+                .Where(m => m.GetCustomAttribute<CustomCommandAttribute>(false) != null));
 
         private void AddMethod(MethodInfo method)
         {
@@ -97,6 +97,7 @@ namespace CustomCommandSystem.Services.Loader
                 var parameterData = new CommandParameterData
                 {
                     UserInputLength = GetUserInputAmountForArg(parameter),
+                    HasDefaultValue = parameter.HasDefaultValue,
                     DefaultValue = parameter.DefaultValue,
                     IsRemainingText = IsRemainingText(parameter),
                     IsNullable = IsNullable(parameter),
