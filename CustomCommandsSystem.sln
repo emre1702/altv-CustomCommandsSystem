@@ -17,6 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration_Client", "Integ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDB07C69-8BC5-4ECD-A2FF-42F396ADE5B9}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		nuget-packager.bat = nuget-packager.bat
 		nuget-publisher.bat = nuget-publisher.bat
 		nuget.exe = nuget.exe
