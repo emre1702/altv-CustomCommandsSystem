@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RAGEMP-CustomCommandsSystem</id>
-    <version>1.0.9</version>
+    <version>1.1.0</version>
     <title>Custom commands system for RAGE:MP</title>
     <authors>Bonus (emre1702)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,15 @@
       Create custom commands in RAGE with C#.
       Read more about it in the Readme in GitHub.
     </description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>
+      1. Improve nullable parameter handling for commands.
+      2. Fix default value null for a command parameter.
+      3. Add support for commands without arguments (thanks to @taviss).
+      4. Add command usage (thanks to @taviss)
+      5. Add multiple new settings: UsageOutputType, NullDefaultValueName, SingleUsageOutputPrefix, MultipleUsagesOutputPrefix, UsageAddDefaultValues, PlayerNotFoundErrorMessage
+      6. Remove "CommandWithTheseArgsDoesNotExistError" setting
+      7. Add UserInputData for events and converters (contains command, arguments and the whole cleaned message).
+    </releaseNotes>
     <tags>RAGE RAGEMP GTANetwork GTA GTA5 RAGE:MP Bootstrapper Commands CustomCommands Bonus</tags>
     <dependencies>
       <group targetFramework="netcoreapp3.1">
