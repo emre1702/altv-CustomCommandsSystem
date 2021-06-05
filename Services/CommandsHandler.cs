@@ -1,16 +1,10 @@
-﻿using CustomCommandSystem.Common;
-using GTANetworkAPI;
-using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Interfaces.Models;
-using System.Diagnostics.CodeAnalysis;
-using CustomCommandSystem.Common.Datas;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-using System;
-using CustomCommandSystem.Services.Utils;
+﻿using CustomCommandSystem.Common.Interfaces.Services;
 using CustomCommandSystem.Common.Models;
+using CustomCommandSystem.Services.Utils;
+using GTANetworkAPI;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace CustomCommandSystem.Services
 {
@@ -22,12 +16,13 @@ namespace CustomCommandSystem.Services
         private readonly ICommandParser _commandParser;
         private readonly ICommandArgumentsParser _argumentsParser;
         private readonly ICommandMethodExecuter _methodExecuter;
-        private readonly ICommandMethodParser _methodParser;
+        private readonly ICommandMethodsParser _methodParser;
         private readonly ICommandsConfiguration _configuration;
         private readonly ICommandsLoader _commandsLoader;
+        private readonly IWrongUsageHandler _wrongUsageHandler;
 
         public CommandsHandler(ICommandMessageCleaner cleaner, ICommandParser commandParser, ICommandArgumentsParser argumentsParser, ICommandsLoader commandsLoader,
-             ICommandMethodExecuter methodExecuter, ICommandMethodParser methodParser, ICommandsConfiguration configuration)
+             ICommandMethodExecuter methodExecuter, ICommandMethodsParser methodParser, ICommandsConfiguration configuration, IWrongUsageHandler wrongUsageHandler)
         {
             _cleaner = cleaner;
             _commandParser = commandParser;
@@ -36,6 +31,7 @@ namespace CustomCommandSystem.Services
             _methodParser = methodParser;
             _configuration = configuration;
             _commandsLoader = commandsLoader;
+            _wrongUsageHandler = wrongUsageHandler;
 
             Instance = this;
         }
@@ -44,39 +40,49 @@ namespace CustomCommandSystem.Services
         {
             message = _cleaner.Clean(message);
             var (command, remainingMessage) = _commandParser.Parse(message);
-            if (!TryGetCommandData(player, command, out var _))
-                return;
-
             var usedParameters = _argumentsParser.ParseUserArguments(remainingMessage);
-            if (!TryGetPossibleMethods(player, command, usedParameters, out var possibleMethods))
+            var userInputData = new UserInputData(command, message, usedParameters);
+
+            if (!TryGetCommandData(player, userInputData, out var commandData))
+                return;
+            if (!TryGetPossibleMethods(player, userInputData, usedParameters, commandData, out var possibleMethods))
                 return;
 
-            await _methodExecuter.TryExecuteSuitable(player, command, possibleMethods, usedParameters);
+            await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, possibleMethods);
         }
 
-        private bool TryGetCommandData(Player player, string cmd, [NotNullWhen(true)] out CommandData? commandData)
+        private bool TryGetCommandData(Player player, UserInputData userInputData, [NotNullWhen(true)] out CommandData? commandData)
         {
-            commandData = _commandsLoader.GetCommandData(cmd);
+            commandData = _commandsLoader.GetCommandData(userInputData.Command);
 
             if (commandData is null && _configuration.CommandDoesNotExistError is { } text)
-                NAPI.Task.Run(() => player.SendChatMessage(text));
+                _configuration.MessageOutputHandler.Invoke(new CommandOutputData(player, text, userInputData));
 
             return !(commandData is null);
         }
 
-        private bool TryGetPossibleMethods(Player player, string command, string[] usedParameters, [NotNullWhen(true)] out List<CommandMethodData>? possibleMethods)
+        private bool TryGetPossibleMethods(Player player, UserInputData userInputData, string[] usedParameters, CommandData commandData, [NotNullWhen(true)] out List<CommandMethodData>? possibleMethods)
         {
-            possibleMethods = _methodParser.GetPossibleMethods(command, usedParameters)?.ToList();
-            if (possibleMethods is null)
+            if (commandData is null)
             {
+                possibleMethods = null;
                 if (_configuration.CommandDoesNotExistError is { } text)
-                    NAPI.Task.Run(() => player.SendChatMessage(text));
+                    _configuration.MessageOutputHandler.Invoke(new CommandOutputData(player, text, userInputData));
                 return false;
             }
-            if (possibleMethods is null)
+            
+            possibleMethods = _methodParser.GetPossibleMethods(userInputData.Command, usedParameters, commandData).ToList();
+            if (!possibleMethods.Any())
             {
-                if (_configuration.CommandWithTheseArgsDoesNotExistError is { } text) 
-                    NAPI.Task.Run(() => player.SendChatMessage(text));
+                var wrongUsageOutputted = _wrongUsageHandler.Handle(player, userInputData, commandData.Methods, possibleMethods);
+                if (!wrongUsageOutputted)
+                {
+                    if (_configuration.CommandUsedIncorrectly is { } text)
+                        _configuration.MessageOutputHandler.Invoke(new CommandOutputData(player, text, userInputData));
+                    else if (_configuration.CommandDoesNotExistError is { } text2)
+                        _configuration.MessageOutputHandler.Invoke(new CommandOutputData(player, text2, userInputData));
+                }
+                    
                 return false;
             }
             return true;

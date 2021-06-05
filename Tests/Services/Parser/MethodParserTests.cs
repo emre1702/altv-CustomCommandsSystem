@@ -1,4 +1,5 @@
 ﻿using CustomCommandSystem.Common.Delegates;
+using CustomCommandSystem.Common.Interfaces.Services;
 using CustomCommandSystem.Services.Loader;
 using CustomCommandSystem.Services.Parser;
 using CustomCommandSystem.Services.Utils;
@@ -15,13 +16,14 @@ namespace CustomCommandSystem.Tests.Services.Parser
         {
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = new ConsoleLogger();
-            var argumentsConverter = new ArgumentsConverter();
-            var methodsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
-            var methodParser = new MethodParser(methodsLoader);
+            var config = new CommandsConfiguration();
+            var argumentsConverter = new ArgumentsConverter(config);
+            ICommandsLoader commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
+            var methodsParser = new MethodsParser();
             var args = new string[] { "1", "2" };
 
-            methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
-            var possibleMethods = methodParser.GetPossibleMethods("TeSt4", args).ToList();
+            commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
+            var possibleMethods = methodsParser.GetPossibleMethods("TeSt4", args, commandsLoader.GetCommandData("TeSt4")!).ToList();
 
             Assert.AreEqual(4, possibleMethods.Count);
         }

@@ -1,22 +1,16 @@
 ﻿using CustomCommandSystem.Common.Interfaces.Services;
 using CustomCommandSystem.Common.Models;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace CustomCommandSystem.Services.Parser
 {
-    internal class MethodParser : ICommandMethodParser
+    internal class MethodsParser : ICommandMethodsParser
     {
-        private readonly ICommandsLoader _methodsLoader;
 
-        public MethodParser(ICommandsLoader methodsLoader)
-            => _methodsLoader = methodsLoader;
-
-        public IEnumerable<CommandMethodData>? GetPossibleMethods(string cmd, string[] userArgs)
+        public IEnumerable<CommandMethodData> GetPossibleMethods(string cmd, string[] userArgs, CommandData commandData)
         {
-            var commandData = _methodsLoader.GetCommandData(cmd);
-            if (commandData is null) return null;
-
             var methods = FilterByArgsAmount(commandData.Methods, userArgs.Length);
             return methods;
         }

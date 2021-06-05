@@ -41,13 +41,14 @@ namespace CustomCommandSystem.Core.DependencyInjection
                 .AddSingleton<ICommandArgumentsConverter, ArgumentsConverter>()
                 .AddSingleton<ICommandArgumentsParser, ArgumentsParser>()
                 .AddSingleton<ICommandParser, CommandParser>()
-                .AddSingleton<ICommandMethodParser, MethodParser>();
+                .AddSingleton<ICommandMethodsParser, MethodsParser>();
 
         private static IServiceCollection WithUtils(this IServiceCollection serviceCollection)
             => serviceCollection
                 .AddSingleton<ICommandsConfiguration>(CommandsConfiguration.LazyInstance.Value)
                 .AddSingleton<ILogger, ConsoleLogger>()
-                .AddSingleton<FastMethodInvoker>();
+                .AddSingleton<FastMethodInvoker>()
+                .AddSingleton<IWrongUsageHandler, WrongUsageHandler>();
 
     }
 }

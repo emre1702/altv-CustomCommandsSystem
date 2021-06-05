@@ -32,7 +32,7 @@ namespace CustomCommandSystem.Tests.Services.Data
 
         [CustomCommand("Test")]
 
-        private static void TestPrivateStaticCommand(Player player, CustomCommandInfo info, Vector3 vector3, int testInt, string a = "test", int b = 5,
+        private static void TestPrivateStaticCommand(Player player, CustomCommandInfo info, Vector3 vector3, int testInt, string a = "test", int b = 5, string? c = null,
             [CustomCommandRemainingText] string remainingText = "")
         {
 

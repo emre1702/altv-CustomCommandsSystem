@@ -21,7 +21,8 @@ namespace CustomCommandSystem.Tests.Services.Loader
         {
             var fastMethodInvoker = new FastMethodInvoker();
             var consoleLogger = new ConsoleLogger();
-            var argumentsConverter = new ArgumentsConverter();
+            var configuration = new CommandsConfiguration();
+            var argumentsConverter = new ArgumentsConverter(configuration);
             _commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter);
         }
 

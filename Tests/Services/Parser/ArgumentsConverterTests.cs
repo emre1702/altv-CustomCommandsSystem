@@ -1,4 +1,6 @@
-﻿using CustomCommandSystem.Services.Parser;
+﻿using CustomCommandSystem.Common.Models;
+using CustomCommandSystem.Services.Parser;
+using CustomCommandSystem.Services.Utils;
 using CustomCommandSystem.Tests.Services.Parser.Data;
 using GTANetworkAPI;
 using NUnit.Framework;
@@ -11,10 +13,21 @@ namespace CustomCommandSystem.Tests.Services.Parser
 {
     class ArgumentsConverterTests
     {
+        #nullable disable
+        private ArgumentsConverter _argumentsConverter;
+        #nullable restore
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            var configuration = new CommandsConfiguration();
+            _argumentsConverter = new ArgumentsConverter(configuration);
+        }
+        
+
         [Test]
         public async Task Convert_WithBasicTypesWorks()
         {
-            var converter = new ArgumentsConverter();
             var valuesAndTypes = new List<(string, object, Type)> 
             { 
                 ("true", true, typeof(bool)),
@@ -39,7 +52,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesAndTypes.Count;)
             {
-                var (convertedValue, lengthUsed) = await converter.Convert(new Player(new NetHandle()), values, i, valuesAndTypes[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesAndTypes[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesAndTypes[i].Item2, convertedValue);
                 Assert.AreEqual(1, lengthUsed);
                 i += lengthUsed;
@@ -49,7 +62,6 @@ namespace CustomCommandSystem.Tests.Services.Parser
         [Test]
         public async Task Convert_WithLongTypesWorks()
         {
-            var converter = new ArgumentsConverter();
             var valuesTypesAndLengths = new List<(string, object, Type, int)>
             {
                 ("true", true, typeof(bool), 1),
@@ -62,7 +74,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await converter.Convert(new Player(new NetHandle()), values, i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 if (convertedValue is Vector3 convertedVector3)
                 {
                     var vector3 = (Vector3)valuesTypesAndLengths[i].Item2;
@@ -81,9 +93,8 @@ namespace CustomCommandSystem.Tests.Services.Parser
         [Test]
         public async Task Convert_WithCustomTypesWorks()
         {
-            var converter = new ArgumentsConverter();
-            converter.SetConverter(typeof(TestClassForArgumentsConverter), 2, 
-                (player, args, cancel) => new TestClassForArgumentsConverter(args[0]) { B = int.Parse(args[1]) });
+            _argumentsConverter.SetConverter(typeof(TestClassForArgumentsConverter), 2, 
+                (player, userInputData, args, cancel) => new TestClassForArgumentsConverter(args[0]) { B = int.Parse(args[1]) });
 
             var valuesTypesAndLengths = new List<(string, object, Type, int)>
             {
@@ -96,7 +107,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await converter.Convert(new Player(new NetHandle()), values, i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
@@ -106,9 +117,8 @@ namespace CustomCommandSystem.Tests.Services.Parser
         [Test]
         public async Task Convert_WithCustomTypesWorksAsync()
         {
-            var converter = new ArgumentsConverter();
-            converter.SetAsyncConverter(typeof(TestClassForArgumentsConverter), 2,
-                async (player, args, cancel) => { await Task.Yield(); return new TestClassForArgumentsConverter(args[0]) { B = int.Parse(args[1]) }; });
+            _argumentsConverter.SetAsyncConverter(typeof(TestClassForArgumentsConverter), 2,
+                async (player, userInputData, args, cancel) => { await Task.Yield(); return new TestClassForArgumentsConverter(args[0]) { B = int.Parse(args[1]) }; });
 
             var valuesTypesAndLengths = new List<(string, object, Type, int)>
             {
@@ -121,7 +131,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await converter.Convert(new Player(new NetHandle()), values, i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
