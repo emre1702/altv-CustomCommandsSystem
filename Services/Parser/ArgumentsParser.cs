@@ -1,4 +1,5 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
+﻿using CustomCommandSystem.Common.Exceptions;
+using CustomCommandSystem.Common.Interfaces.Services;
 using CustomCommandSystem.Common.Models;
 using GTANetworkAPI;
 using System;
@@ -16,7 +17,7 @@ namespace CustomCommandSystem.Services.Parser
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
             => string.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
 
-        public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs)
+        public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, UserInputData userInputData)
         {
             if (commandMethodData.IsPlayerRequired)
                 yield return player;
@@ -28,7 +29,7 @@ namespace CustomCommandSystem.Services.Parser
             for (int methodParamIndex = 0, userArgIndex = 0; methodParamIndex < methodParameters.Count; ++methodParamIndex)
             {
                 var methodParameter = methodParameters[methodParamIndex];
-                if (userArgIndex >= userArgs.Length)
+                if (userArgIndex >= userInputData.Arguments.Length)
                 {
                     if (methodParameter.HasDefaultValue)
                     {
@@ -39,12 +40,12 @@ namespace CustomCommandSystem.Services.Parser
                 }
                 else if (methodParameter.IsRemainingText)
                 {
-                    yield return string.Join(' ', new ArraySegment<string>(userArgs, userArgIndex, userArgs.Length - userArgIndex));
-                    userArgIndex = userArgs.Length;
+                    yield return string.Join(' ', new ArraySegment<string>(userInputData.Arguments, userArgIndex, userInputData.Arguments.Length - userArgIndex));
+                    userArgIndex = userInputData.Arguments.Length;
                 }
                 else
                 {
-                    var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(player, userArgs, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
+                    var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(player, userInputData, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
                     if (convertedArg is null && !methodParameter.IsNullable)
                         ThrowError(cmdErrorOnNullCancel);
                     cmdErrorOnNullCancel.Cancel = false;
@@ -57,7 +58,7 @@ namespace CustomCommandSystem.Services.Parser
         private void ThrowError(CancelEventArgs cmdErrorOnNullCancel)
         {
             if (cmdErrorOnNullCancel.Cancel)
-                throw new ArgumentException();
+                throw new ExpectionWithoutOutput();
             else 
                 throw new Exception();
         }

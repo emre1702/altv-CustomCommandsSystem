@@ -7,6 +7,6 @@ namespace CustomCommandSystem.Common.Interfaces.Services
     internal interface ICommandArgumentsParser
     {
         string[] ParseUserArguments(string remainingMessageWithoutCmd);
-        IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, string[] userArgs);
+        IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, UserInputData userInputData);
     }
 }

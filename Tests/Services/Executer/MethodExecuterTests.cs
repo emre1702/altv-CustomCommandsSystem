@@ -1,5 +1,6 @@
 ﻿using CustomCommandSystem.Common.Extensions;
 using CustomCommandSystem.Common.Interfaces.Services;
+using CustomCommandSystem.Common.Models;
 using CustomCommandSystem.Services.Executer;
 using CustomCommandSystem.Services.Loader;
 using CustomCommandSystem.Services.Parser;
@@ -19,23 +20,26 @@ namespace CustomCommandSystem.Tests.Services.Executer
     {
         #nullable disable
         private StringWriter _stringWriter;
-        private MethodParser _methodParser;
+        private MethodsParser _methodParser;
         private MethodExecuter _methodExecuter;
-        #nullable restore
+        private ICommandsLoader _commandsLoader;
+#nullable restore
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             NapiTaskExtensions.InTest = true;
 
+            var config = new CommandsConfiguration { RunCommandMethodInMainThread = false };
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = Substitute.For<ILogger>();
-            var argumentsConverter = new ArgumentsConverter();
-            var methodsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
-            methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
-            _methodParser = new MethodParser(methodsLoader);
+            var argumentsConverter = new ArgumentsConverter(config);
+            _commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
+            _commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
+            _methodParser = new MethodsParser();
             var argumentsParser = new ArgumentsParser(argumentsConverter);
-            _methodExecuter = new MethodExecuter(argumentsParser, new CommandsConfiguration { RunCommandMethodInMainThread = false });
+            var wrongUsageHandler = new WrongUsageHandler(config);
+            _methodExecuter = new MethodExecuter(argumentsParser, config, wrongUsageHandler);
         }
 
         [OneTimeTearDown]
@@ -57,9 +61,11 @@ namespace CustomCommandSystem.Tests.Services.Executer
         {
             var player = new Player(new NetHandle());
             var arguments = new string[] { "5", "hallo", "123", "123", "123" };
-            var methods = _methodParser.GetPossibleMethods("Test4", arguments);
+            var commandData = _commandsLoader.GetCommandData("Test4")!;
+            var methods = _methodParser.GetPossibleMethods("Test4", arguments, commandData);
 
-            var result = await _methodExecuter.TryExecuteSuitable(player, "Test4", methods.ToList(), arguments);
+            var userInputData = new UserInputData("Test4", "Test4 " + string.Join(' ', arguments), arguments);
+            var result = await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, methods.ToList());
 
             Assert.IsTrue(result);
             Assert.AreEqual("Test4Static called 5 - hallo 123 123 123", _stringWriter.ToString());
@@ -76,9 +82,11 @@ namespace CustomCommandSystem.Tests.Services.Executer
         {
             var player = new Player(new NetHandle());
             var args = arg.Length > 0 ? new string[] { arg } : new string[0];
-            var methods = _methodParser.GetPossibleMethods(cmd, args);
+            var commandData = _commandsLoader.GetCommandData(cmd)!;
+            var methods = _methodParser.GetPossibleMethods(cmd, args, commandData);
 
-            var result = await _methodExecuter.TryExecuteSuitable(player, cmd, methods.ToList(), args);
+            var userInputData = new UserInputData(cmd, "Test4 " + string.Join(' ', args), args);
+            var result = await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, methods.ToList());
            
             Assert.IsTrue(result);
             

@@ -7,6 +7,6 @@ namespace CustomCommandSystem.Common.Interfaces.Services
 {
     internal interface ICommandMethodExecuter
     {
-        Task<bool> TryExecuteSuitable(Player player, string cmd, List<CommandMethodData> possibleMethods, string[] userArguments);
+        Task<bool> TryExecuteSuitable(Player player, UserInputData userInputData, CommandData commandData, List<CommandMethodData> possibleMethods);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CustomCommandSystem.Common.Delegates;
+using CustomCommandSystem.Common.Models;
 using GTANetworkAPI;
 
 namespace CustomCommandSystem.Integration
@@ -20,11 +21,11 @@ namespace CustomCommandSystem.Integration
         /// </summary>
         public static event AfterCommandExecuteDelegate? AfterCommandExecute;
 
-        internal static void OnBeforeCommandExecute(Player player, string cmd, object?[] args, CancelEventArgs cancelEventArgs)
-            => BeforeCommandExecute?.Invoke(player, cmd, args, cancelEventArgs);
+        internal static void OnBeforeCommandExecute(Player player, UserInputData userInputData, object?[] args, CancelEventArgs cancelEventArgs)
+            => BeforeCommandExecute?.Invoke(player, userInputData, args, cancelEventArgs);
 
-        internal static void OnAfterCommandExecute(Player player, string cmd, object?[] args)
-            => AfterCommandExecute?.Invoke(player, cmd, args);
+        internal static void OnAfterCommandExecute(Player player, UserInputData userInputData, object?[] args)
+            => AfterCommandExecute?.Invoke(player, userInputData, args);
     }
 }
 

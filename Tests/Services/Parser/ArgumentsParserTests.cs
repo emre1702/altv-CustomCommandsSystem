@@ -44,14 +44,15 @@ namespace CustomCommandSystem.Tests.Services.Parser
             var amountDefaultArgs = withCommandInfos ? 2 : 1;
             var player = new Player(new NetHandle());
             var fastMethodInvoker = new FastMethodInvoker();
-            var argumentsConverter = new ArgumentsConverter();
+            var argumentsConverter = new ArgumentsConverter(new CommandsConfiguration());
             var methodsLoader = new CommandsLoader(fastMethodInvoker, new ConsoleLogger(), argumentsConverter);
             methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             var commandMethodData = (methodsLoader as ICommandsLoader).GetCommandData("Test3" + withCommandInfos.ToString())!.Methods.First();
             var userArgs = new string[] { "hello", "a", "1", "2.23", "123", "true", "12.412", "423" };
             
             var argumentsParser = new ArgumentsParser(argumentsConverter);
-            var invokeArgs = await argumentsParser.ParseInvokeArguments(player, commandMethodData, userArgs).ToListAsync();
+            var userInputData = new UserInputData("Test3", "Test3 " + string.Join(' ', userArgs), userArgs);
+            var invokeArgs = await argumentsParser.ParseInvokeArguments(player, commandMethodData, userInputData).ToListAsync();
 
             Assert.AreEqual(player, invokeArgs[0]);
             if (withCommandInfos)
