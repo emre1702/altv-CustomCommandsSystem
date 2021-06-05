@@ -2,7 +2,7 @@
 
 namespace CustomCommandSystem.Common.Exceptions
 {
-    public class ExpectionWithoutOutput : Exception
+    internal class ExpectionWithoutOutput : Exception
     {
     }
 }
