@@ -1,11 +1,12 @@
-﻿using CustomCommandSystem.Common.Exceptions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Exceptions;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
-namespace CustomCommandSystem.Services.Parser
+namespace CustomCommandsSystem.Services.Parser
 {
     internal class ArgumentsParser : ICommandArgumentsParser
     {
@@ -17,7 +18,7 @@ namespace CustomCommandSystem.Services.Parser
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
             => string.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
 
-        public async IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, UserInputData userInputData)
+        public async IAsyncEnumerable<object?> ParseInvokeArguments(IPlayer player, CommandMethodData commandMethodData, UserInputData userInputData)
         {
             if (commandMethodData.IsPlayerRequired)
                 yield return player;

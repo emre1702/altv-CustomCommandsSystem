@@ -1,37 +1,36 @@
-﻿using CustomCommandSystem.Common.Enums;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Enums;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using NSubstitute;
 using NUnit.Framework;
-using System;
 using System.Linq;
 using System.Reflection;
 
-namespace CustomCommandSystem.Tests.Services.Utils
+namespace CustomCommandsSystem.Tests.Services.Utils
 {
     class WrongUsageHandlerTests
     {
-        #nullable disable
+#nullable disable
         private ICommandsConfiguration _config;
         private WrongUsageHandler _wrongUsageHandler;
-        private Player _player;
-        #nullable restore
+        private IPlayer _player;
+#nullable restore
 
         [SetUp]
-        public void SetUp() 
+        public void SetUp()
         {
             _config = new CommandsConfiguration();
             _wrongUsageHandler = new WrongUsageHandler(_config);
-            _player = new Player(new NetHandle());   
+            _player = Substitute.For<IPlayer>();
         }
 
         [Test]
         [TestCase("Test", "asd", false, "null", UsageOutputType.OneUsage, true, ExpectedResult = "USAGE: /Test [test1] [test2]")]
-        [TestCase("Test", "asd", false, "null", UsageOutputType.AllUsages, true, 
+        [TestCase("Test", "asd", false, "null", UsageOutputType.AllUsages, true,
             ExpectedResult = "USAGES:\r\n/Test [test1] [test2]\r\n/Test\r\n/Test [vector3] [testInt] [a] [b] [c] [remainingText]\r\n/Test")]
         [TestCase("Test", "asd", true, "null", UsageOutputType.OneUsage, true, ExpectedResult = "USAGE: /Test [test1] [test2]")]
         [TestCase("Test", "asd", true, "nothing", UsageOutputType.AllUsages, true,

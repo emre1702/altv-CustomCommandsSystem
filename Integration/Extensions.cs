@@ -1,13 +1,14 @@
-﻿using CustomCommandSystem.Common.Delegates;
-using CustomCommandSystem.Services;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using GTANetworkMethods;
+﻿using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
+using CustomCommandsSystem.Common.Delegates;
+using CustomCommandsSystem.Services;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Integration
+namespace CustomCommandsSystem.Integration
 {
     public static class Extensions
     {
@@ -42,8 +43,8 @@ namespace CustomCommandSystem.Integration
         ///         </item>
         ///     </list></para>
         /// </remarks>
-        public static void RegisterCustom(this Command napiCommand)
-            => RegisterCustom(napiCommand, Assembly.GetCallingAssembly());
+        public static void RegisterCustomCommand(this Command command)
+            => RegisterCustom(command, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Registers all commands (doesn't matter if private, static, not static etc.) in the specified assembly.
@@ -98,7 +99,7 @@ namespace CustomCommandSystem.Integration
         /// </summary>
         /// <param name="player">Player to be passed to the command methods and to be error messages to.</param>
         /// <param name="command">The command with prefix or without prefix.</param>
-        public static void Execute(this Command _, GTANetworkAPI.Player player, string command)
+        public static void Execute(this Command _, IPlayer player, string command)
             => CommandsHandler.Instance?.ExecuteCommand(player, command);
     }
 }

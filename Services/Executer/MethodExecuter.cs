@@ -1,16 +1,17 @@
-﻿using CustomCommandSystem.Common.Delegates;
-using CustomCommandSystem.Common.Exceptions;
-using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Delegates;
+using CustomCommandsSystem.Common.Exceptions;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Common.Utils;
+using CustomCommandsSystem.Services.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Services.Executer
+namespace CustomCommandsSystem.Services.Executer
 {
     internal class MethodExecuter : ICommandMethodExecuter
     {
@@ -24,7 +25,7 @@ namespace CustomCommandSystem.Services.Executer
         public MethodExecuter(ICommandArgumentsParser argumentsParser, ICommandsConfiguration configuration, IWrongUsageHandler wrongUsageHandler)
             => (_argumentsParser, _configuration, _wrongUsageHandler) = (argumentsParser, configuration, wrongUsageHandler);
 
-        public async Task<bool> TryExecuteSuitable(Player player, UserInputData userInputData, CommandData commandData, List<CommandMethodData> possibleMethods)
+        public async Task<bool> TryExecuteSuitable(IPlayer player, UserInputData userInputData, CommandData commandData, List<CommandMethodData> possibleMethods)
         {
             var suitableMethodInfo = await GetSuitableMethodInfo(player, possibleMethods, userInputData);
             if (suitableMethodInfo.MethodData is null)
@@ -55,7 +56,7 @@ namespace CustomCommandSystem.Services.Executer
             return true;
         }
 
-        private async Task<SuitableMethodInfo> GetSuitableMethodInfo(Player player, List<CommandMethodData> possibleMethods, UserInputData userInputData)
+        private async Task<SuitableMethodInfo> GetSuitableMethodInfo(IPlayer player, List<CommandMethodData> possibleMethods, UserInputData userInputData)
         {
             var outputCommandUsedWrongIfNoneFound = false;
             foreach (var possibleMethod in possibleMethods)
@@ -81,14 +82,14 @@ namespace CustomCommandSystem.Services.Executer
             return new SuitableMethodInfo { OutputCommandUsedWrongIfNoneFound = outputCommandUsedWrongIfNoneFound };
         }
 
-        private async Task<bool> AreCustomRequirementsMet(CommandMethodData methodData, Player player, object?[] methodArgs)
+        private async Task<bool> AreCustomRequirementsMet(CommandMethodData methodData, IPlayer player, object?[] methodArgs)
         {
             if (methodData.RequirementCheckers.Length == 0) return true;
 
             CustomCommandInfo? customCommandInfo = methodData.IsCommandInfoRequired ? (CustomCommandInfo)methodArgs[methodData.UserParametersStartIndex - 1]! : null;
             var args = new ArraySegment<object?>(methodArgs, methodData.UserParametersStartIndex, methodArgs.Length - methodData.UserParametersStartIndex);
 
-            bool worked = await NAPI.Task.RunWait(() =>
+            bool worked = await AltAsyncUtils.DoConsideringTest(() =>
             {
                 foreach (var checker in methodData.RequirementCheckers)
                     if (!checker.CanExecute(player, customCommandInfo, args))
@@ -101,7 +102,7 @@ namespace CustomCommandSystem.Services.Executer
 
         private void RunSync(CommandMethodData methodData, object?[] args)
         {
-            NAPI.Task.Run(() =>
+            AltAsyncUtils.DoConsideringTest(() =>
             {
                 if (methodData.FastInvokeHandler is FastInvokeHandler nonStaticHandler)
                     nonStaticHandler.Invoke(methodData.Instance, args);

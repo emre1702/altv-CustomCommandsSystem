@@ -1,7 +1,7 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
 using System;
 
-namespace CustomCommandSystem.Services.Utils
+namespace CustomCommandsSystem.Services.Utils
 {
     internal class ConsoleLogger : ILogger
     {
@@ -9,7 +9,7 @@ namespace CustomCommandSystem.Services.Utils
         {
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("[Error in CustomCommandSystem] " + message);
+            Console.WriteLine("[Error in CustomCommandsSystem] " + message);
             Console.ForegroundColor = oldColor;
         }
 
@@ -17,7 +17,7 @@ namespace CustomCommandSystem.Services.Utils
         {
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("[Warning in CustomCommandSystem] " + message);
+            Console.WriteLine("[Warning in CustomCommandsSystem] " + message);
             Console.ForegroundColor = oldColor;
         }
     }

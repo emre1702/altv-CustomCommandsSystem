@@ -1,4 +1,4 @@
-﻿namespace CustomCommandSystem.Common.Enums
+﻿namespace CustomCommandsSystem.Common.Enums
 {
     public enum UsageOutputType
     {

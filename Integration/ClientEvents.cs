@@ -1,17 +1,17 @@
-﻿using CustomCommandSystem.Services;
-using GTANetworkAPI;
-using CustomCommandSystem.Common.Extensions;
+﻿using CustomCommandsSystem.Services;
+using AltV.Net.Elements.Entities;
+using AltV.Net;
 
-namespace CustomCommandSystem.Integration
+namespace CustomCommandsSystem.Integration
 {
     internal class ClientEvents
     {
         public ClientEvents()
         {
-            NAPI.ClientEvent.Register<Player, string>("CustomCommandSystem:Call", this, ExecuteCommand);
+            Alt.OnClient<IPlayer, string>("CustomCommandsSystem:Call", ExecuteCommand);
         }
 
-        private void ExecuteCommand(Player player, string command)
+        private void ExecuteCommand(IPlayer player, string command)
             => CommandsHandler.Instance?.ExecuteCommand(player, command);
     }
 }

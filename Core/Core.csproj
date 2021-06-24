@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>CustomCommandSystem.Core</AssemblyName>
-    <RootNamespace>CustomCommandSystem.Core</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>CustomCommandsSystem.Core</AssemblyName>
+    <RootNamespace>CustomCommandsSystem.Core</RootNamespace>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>

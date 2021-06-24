@@ -1,8 +1,9 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Models;
+using AltV.Net.Elements.Entities;
 using System;
+using System.ComponentModel;
 
-namespace CustomCommandSystem.Common.Delegates
+namespace CustomCommandsSystem.Common.Delegates
 {
-    public delegate object? ConverterDelegate(Player player, UserInputData userInputData, ArraySegment<string> argumentsForConverter, CancelEventArgs cancelErrorMessageOnFail);
+    public delegate object? ConverterDelegate(IPlayer player, UserInputData userInputData, ArraySegment<string> argumentsForConverter, CancelEventArgs cancelErrorMessageOnFail);
 }

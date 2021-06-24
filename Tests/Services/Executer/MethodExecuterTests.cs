@@ -1,11 +1,12 @@
-﻿using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Executer;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Extensions;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Common.Utils;
+using CustomCommandsSystem.Services.Executer;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using NSubstitute;
 using NUnit.Framework;
 using System;
@@ -14,11 +15,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Tests.Services.Executer
+namespace CustomCommandsSystem.Tests.Services.Executer
 {
     class MethodExecuterTests
     {
-        #nullable disable
+#nullable disable
         private StringWriter _stringWriter;
         private MethodsParser _methodParser;
         private MethodExecuter _methodExecuter;
@@ -28,8 +29,7 @@ namespace CustomCommandSystem.Tests.Services.Executer
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            NapiTaskExtensions.InTest = true;
-
+            AltAsyncUtils.InTest = true;
             var config = new CommandsConfiguration { RunCommandMethodInMainThread = false };
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = Substitute.For<ILogger>();
@@ -59,7 +59,7 @@ namespace CustomCommandSystem.Tests.Services.Executer
         [Test]
         public async Task TryExecuteSuitable_ExecutesCorrectMethod()
         {
-            var player = new Player(new NetHandle());
+            var player = Substitute.For<IPlayer>();
             var arguments = new string[] { "5", "hallo", "123", "123", "123" };
             var commandData = _commandsLoader.GetCommandData("Test4")!;
             var methods = _methodParser.GetPossibleMethods("Test4", arguments, commandData);
@@ -80,16 +80,16 @@ namespace CustomCommandSystem.Tests.Services.Executer
         [TestCase("Output", "", ExpectedResult = "Output empty called")]
         public async Task<string> TryExecuteSuitable_ChecksRequirementAttribute(string cmd, string arg)
         {
-            var player = new Player(new NetHandle());
+            var player = Substitute.For<IPlayer>();
             var args = arg.Length > 0 ? new string[] { arg } : new string[0];
             var commandData = _commandsLoader.GetCommandData(cmd)!;
             var methods = _methodParser.GetPossibleMethods(cmd, args, commandData);
 
             var userInputData = new UserInputData(cmd, "Test4 " + string.Join(' ', args), args);
             var result = await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, methods.ToList());
-           
+
             Assert.IsTrue(result);
-            
+
             return _stringWriter.ToString();
         }
     }

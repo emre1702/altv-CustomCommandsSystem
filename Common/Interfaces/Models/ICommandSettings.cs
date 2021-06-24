@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CustomCommandSystem.Common.Interfaces.Models
+namespace CustomCommandsSystem.Common.Interfaces.Models
 {
     internal interface ICommandSettings
     {

@@ -1,6 +1,6 @@
-﻿using CustomCommandSystem.Services.Utils;
+﻿using CustomCommandsSystem.Services.Utils;
 
-namespace CustomCommandSystem.Integration
+namespace CustomCommandsSystem.Integration
 {
     /// <summary>
     /// Contains the configurations for the command system.

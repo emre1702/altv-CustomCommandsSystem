@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>CustomCommandSystem.Client.Integration</AssemblyName>
     <RootNamespace>CustomCommandSystem.Client.Integration</RootNamespace>
     <NoWarn>$(NoWarn);NETSDK1138</NoWarn>

@@ -1,4 +1,4 @@
-﻿namespace CustomCommandSystem.Common.Interfaces.Services
+﻿namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface ICommandParser
     {

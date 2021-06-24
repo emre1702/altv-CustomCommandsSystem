@@ -1,14 +1,12 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
-using NSubstitute;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
 
-namespace CustomCommandSystem.Tests.Services.Loader
+namespace CustomCommandsSystem.Tests.Services.Loader
 {
     class CommandsLoaderTests
     {

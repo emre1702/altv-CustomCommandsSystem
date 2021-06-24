@@ -1,11 +1,11 @@
-﻿using CustomCommandSystem.Common.Attributes;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace CustomCommandSystem.Common.Models
+namespace CustomCommandsSystem.Common.Models
 {
     internal class CommandMethodData
     {
@@ -67,14 +67,14 @@ namespace CustomCommandSystem.Common.Models
         private bool GetIsPlayerRequired(MethodInfo method)
         {
             var parameters = method.GetParameters();
-            return parameters.Length >= 1 && parameters[0].ParameterType == typeof(Player);
+            return parameters.Length >= 1 && parameters[0].ParameterType == typeof(IPlayer);
         }
 
         private bool GetIsCommandInfoRequired(MethodInfo method)
         {
             var parameters = method.GetParameters();
             return parameters.Length >= 1 && parameters[0].ParameterType == typeof(CustomCommandInfo)
-                || parameters.Length >= 2 && parameters[0].ParameterType == typeof(Player) && parameters[1].ParameterType == typeof(CustomCommandInfo);
+                || parameters.Length >= 2 && parameters[0].ParameterType == typeof(IPlayer) && parameters[1].ParameterType == typeof(CustomCommandInfo);
         }
     }
 }

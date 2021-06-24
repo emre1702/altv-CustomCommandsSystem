@@ -1,23 +1,21 @@
-﻿using CustomCommandSystem.Common.Attributes;
-using CustomCommandSystem.Common.Datas;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Attributes;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace CustomCommandSystem.Services.Loader
+namespace CustomCommandsSystem.Services.Loader
 {
     internal class CommandsLoader : ICommandsLoader
     {
         public static CommandsLoader? Instance { get; private set; }
 
-        private readonly Dictionary<string, CommandData> _commandDatas = new Dictionary<string, CommandData>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly Dictionary<Type, object> _instancesPerClass = new Dictionary<Type, object>();
-        private readonly HashSet<Assembly> _assembliesRegistered = new HashSet<Assembly>();
+        private readonly Dictionary<string, CommandData> _commandDatas = new(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<Type, object> _instancesPerClass = new();
+        private readonly HashSet<Assembly> _assembliesRegistered = new();
 
         private readonly FastMethodInvoker _fastMethodInvoker;
         private readonly ILogger _logger;

@@ -1,11 +1,12 @@
-﻿using CustomCommandSystem.Common.Delegates;
-using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Delegates;
+using CustomCommandsSystem.Common.Models;
+using System.ComponentModel;
 
-namespace CustomCommandSystem.Integration
+namespace CustomCommandsSystem.Integration
 {
     /// <summary>
-    /// Contains the events of the CustomCommandSystem.
+    /// Contains the events of the CustomCommandsSystem.
     /// </summary>
     public static class Events
     {
@@ -21,10 +22,10 @@ namespace CustomCommandSystem.Integration
         /// </summary>
         public static event AfterCommandExecuteDelegate? AfterCommandExecute;
 
-        internal static void OnBeforeCommandExecute(Player player, UserInputData userInputData, object?[] args, CancelEventArgs cancelEventArgs)
+        internal static void OnBeforeCommandExecute(IPlayer player, UserInputData userInputData, object?[] args, CancelEventArgs cancelEventArgs)
             => BeforeCommandExecute?.Invoke(player, userInputData, args, cancelEventArgs);
 
-        internal static void OnAfterCommandExecute(Player player, UserInputData userInputData, object?[] args)
+        internal static void OnAfterCommandExecute(IPlayer player, UserInputData userInputData, object?[] args)
             => AfterCommandExecute?.Invoke(player, userInputData, args);
     }
 }

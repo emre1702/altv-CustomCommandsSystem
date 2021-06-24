@@ -1,12 +1,12 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Models;
 using System.Collections.Generic;
 
-namespace CustomCommandSystem.Common.Interfaces.Services
+namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface ICommandArgumentsParser
     {
         string[] ParseUserArguments(string remainingMessageWithoutCmd);
-        IAsyncEnumerable<object?> ParseInvokeArguments(Player player, CommandMethodData commandMethodData, UserInputData userInputData);
+        IAsyncEnumerable<object?> ParseInvokeArguments(IPlayer player, CommandMethodData commandMethodData, UserInputData userInputData);
     }
 }

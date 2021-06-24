@@ -1,9 +1,10 @@
-﻿using CustomCommandSystem.Common.Enums;
-using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Resources.Chat.Api;
+using CustomCommandsSystem.Common.Enums;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Common.Utils;
 using System;
 
-namespace CustomCommandSystem.Services.Utils
+namespace CustomCommandsSystem.Services.Utils
 {
     internal class CommandsConfiguration : ICommandsConfiguration
     {
@@ -23,7 +24,7 @@ namespace CustomCommandSystem.Services.Utils
         public Action<CommandOutputData> MessageOutputHandler { get; set; } = (data) =>
         {
             var messages = data.MessageToOutput.Split(Environment.NewLine);
-            NAPI.Task.Run(() =>
+            AltAsyncUtils.DoConsideringTest(() =>
             {
                 foreach (var line in messages)
                     data.Player.SendChatMessage(line);

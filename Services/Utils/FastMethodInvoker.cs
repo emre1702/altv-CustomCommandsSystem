@@ -1,10 +1,10 @@
-﻿using CustomCommandSystem.Common.Delegates;
+﻿using CustomCommandsSystem.Common.Delegates;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace CustomCommandSystem.Services.Utils
+namespace CustomCommandsSystem.Services.Utils
 {
     // Thanks to Jer for helping with the code.
     internal class FastMethodInvoker

@@ -1,8 +1,8 @@
-﻿using CustomCommandSystem.Common.Enums;
-using CustomCommandSystem.Common.Models;
+﻿using CustomCommandsSystem.Common.Enums;
+using CustomCommandsSystem.Common.Models;
 using System;
 
-namespace CustomCommandSystem.Services.Utils
+namespace CustomCommandsSystem.Services.Utils
 {
     public interface ICommandsConfiguration
     {

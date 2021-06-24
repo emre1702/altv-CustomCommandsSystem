@@ -1,12 +1,12 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Common.Interfaces.Services
+namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface ICommandMethodExecuter
     {
-        Task<bool> TryExecuteSuitable(Player player, UserInputData userInputData, CommandData commandData, List<CommandMethodData> possibleMethods);
+        Task<bool> TryExecuteSuitable(IPlayer player, UserInputData userInputData, CommandData commandData, List<CommandMethodData> possibleMethods);
     }
 }

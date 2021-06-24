@@ -1,9 +1,10 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using NSubstitute;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Tests.Services.Parser
+namespace CustomCommandsSystem.Tests.Services.Parser
 {
     class ArgumentsParserTests
     {
@@ -42,7 +43,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
         public async Task ParseInvokeArguments_ReturnsCorrectArguments(bool withCommandInfos)
         {
             var amountDefaultArgs = withCommandInfos ? 2 : 1;
-            var player = new Player(new NetHandle());
+            var player = Substitute.For<IPlayer>();
             var fastMethodInvoker = new FastMethodInvoker();
             var argumentsConverter = new ArgumentsConverter(new CommandsConfiguration());
             var methodsLoader = new CommandsLoader(fastMethodInvoker, new ConsoleLogger(), argumentsConverter);
@@ -59,10 +60,10 @@ namespace CustomCommandSystem.Tests.Services.Parser
                 Assert.IsInstanceOf(typeof(CustomCommandInfo), invokeArgs[1]);
             Assert.AreEqual("hello", invokeArgs[0 + amountDefaultArgs]);
             Assert.AreEqual('a', invokeArgs[1 + amountDefaultArgs]);
-            var vector3 = (invokeArgs[2 + amountDefaultArgs] as Vector3)!;
-            Assert.AreEqual(1, vector3.X, 0.001);
-            Assert.AreEqual(2.23, vector3.Y, 0.001);
-            Assert.AreEqual(123, vector3.Z, 0.001);
+            var position = (Position)invokeArgs[2 + amountDefaultArgs]!;
+            Assert.AreEqual(1, position.X, 0.001);
+            Assert.AreEqual(2.23, position.Y, 0.001);
+            Assert.AreEqual(123, position.Z, 0.001);
             Assert.AreEqual(true, invokeArgs[3 + amountDefaultArgs]);
             Assert.AreEqual(12.412, (float)invokeArgs[4 + amountDefaultArgs]!, 0.001);
             Assert.AreEqual(423, invokeArgs[5 + amountDefaultArgs]);

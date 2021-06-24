@@ -1,9 +1,9 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Core.DependencyInjection;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace CustomCommandSystem.Core
+namespace CustomCommandsSystem.Core
 {
     internal class Init
     {

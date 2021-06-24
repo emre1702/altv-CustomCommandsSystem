@@ -16,6 +16,6 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("c1aba294-3311-4ac8-904c-395427fc9bad")]
-[assembly: InternalsVisibleTo("CustomCommandSystem.Core")]
-[assembly: InternalsVisibleTo("CustomCommandSystem.Tests")]
-[assembly: InternalsVisibleTo("CustomCommandSystem.Integration")]
+[assembly: InternalsVisibleTo("CustomCommandsSystem.Core")]
+[assembly: InternalsVisibleTo("CustomCommandsSystem.Tests")]
+[assembly: InternalsVisibleTo("CustomCommandsSystem.Integration")]

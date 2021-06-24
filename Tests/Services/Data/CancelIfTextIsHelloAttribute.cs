@@ -1,13 +1,13 @@
-﻿using CustomCommandSystem.Common.Attributes;
-using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Attributes;
+using CustomCommandsSystem.Common.Models;
 using System;
 
-namespace CustomCommandSystem.Tests.Services.Data
+namespace CustomCommandsSystem.Tests.Services.Data
 {
     class CancelIfTextIsHelloAttribute : CustomCommandRequirementBaseAttribute
     {
-        public override bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object?> methodArgs)
+        public override bool CanExecute(IPlayer player, CustomCommandInfo? info, ArraySegment<object?> methodArgs)
             => methodArgs[0]!.ToString() != "Hello";
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CustomCommandSystem.Common.Models
+namespace CustomCommandsSystem.Common.Models
 {
     internal class CommandData
     {

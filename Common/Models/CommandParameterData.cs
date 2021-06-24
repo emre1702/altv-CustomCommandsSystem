@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomCommandSystem.Common.Models
+namespace CustomCommandsSystem.Common.Models
 {
     internal class CommandParameterData
     {

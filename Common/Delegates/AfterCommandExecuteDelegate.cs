@@ -1,7 +1,7 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Models;
+using AltV.Net.Elements.Entities;
 
-namespace CustomCommandSystem.Common.Delegates
+namespace CustomCommandsSystem.Common.Delegates
 {
-    public delegate void AfterCommandExecuteDelegate(Player player, UserInputData userInputData, object?[] args);
+    public delegate void AfterCommandExecuteDelegate(IPlayer player, UserInputData userInputData, object?[] args);
 }

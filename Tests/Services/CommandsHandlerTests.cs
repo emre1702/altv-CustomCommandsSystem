@@ -1,28 +1,28 @@
-﻿using CustomCommandSystem.Common.Enums;
-using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Services;
-using CustomCommandSystem.Services.Cleaner;
-using CustomCommandSystem.Services.Executer;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Enums;
+using CustomCommandsSystem.Common.Extensions;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Services;
+using CustomCommandsSystem.Services.Cleaner;
+using CustomCommandsSystem.Services.Executer;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Reflection;
-using static CustomCommandSystem.Tests.Services.Data.TestCommands;
+using static CustomCommandsSystem.Tests.Services.Data.TestCommands;
 
-namespace CustomCommandSystem.Tests.Services
+namespace CustomCommandsSystem.Tests.Services
 {
     class CommandsHandlerTests
     {
 #nullable disable
         private StringWriter _stringWriter;
         private CommandsConfiguration _configuration;
-        private Player _player;
+        private IPlayer _player;
         private CommandsHandler _commandsHandler;
 
 #nullable enable
@@ -31,7 +31,7 @@ namespace CustomCommandSystem.Tests.Services
         public void OneTimeSetUp()
         {
             _configuration = new CommandsConfiguration { RunCommandMethodInMainThread = false };
-            _player = new Player(new NetHandle());
+            _player = Substitute.For<IPlayer>();
             var cleaner = new MessageCleaner(_configuration);
             var commandParser = new CommandParser();
             var argumentsConverter = new ArgumentsConverter(_configuration);

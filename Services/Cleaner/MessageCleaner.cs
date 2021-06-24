@@ -1,8 +1,8 @@
-﻿using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Services.Utils;
+﻿using CustomCommandsSystem.Common.Extensions;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Services.Utils;
 
-namespace CustomCommandSystem.Services.Cleaner
+namespace CustomCommandsSystem.Services.Cleaner
 {
     internal class MessageCleaner : ICommandMessageCleaner
     {

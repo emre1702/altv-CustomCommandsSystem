@@ -1,8 +1,8 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Models;
 using System;
 
-namespace CustomCommandSystem.Common.Attributes
+namespace CustomCommandsSystem.Common.Attributes
 {
     /// <summary>
     /// Override this attribute with your custom attribute to add custom requirements/checks before a command gets executed.<br/>
@@ -21,7 +21,7 @@ namespace CustomCommandSystem.Common.Attributes
         ///     Example: "/kick Player1" => methodArgs will only contain Player1
         /// </param>
         /// <returns>If the requirement was met. Returning false will cancel the execution, BeforeCommandExecute will not be triggered.</returns>
-        public abstract bool CanExecute(Player player, CustomCommandInfo? info, ArraySegment<object?> methodArgs);
+        public abstract bool CanExecute(IPlayer player, CustomCommandInfo? info, ArraySegment<object?> methodArgs);
     }
 }
  

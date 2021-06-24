@@ -1,11 +1,11 @@
-﻿using CustomCommandSystem.Common.Models;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Models;
+using AltV.Net.Elements.Entities;
 using System.Collections.Generic;
 
-namespace CustomCommandSystem.Common.Interfaces.Services
+namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface IWrongUsageHandler
     {
-        bool Handle(Player player, UserInputData userInputData, List<CommandMethodData> commandMethods, List<CommandMethodData> filteredMethods);
+        bool Handle(IPlayer player, UserInputData userInputData, List<CommandMethodData> commandMethods, List<CommandMethodData> filteredMethods);
     }
 }

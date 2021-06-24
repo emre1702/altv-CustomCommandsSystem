@@ -1,7 +1,7 @@
-﻿using CustomCommandSystem.Common.Models;
+﻿using CustomCommandsSystem.Common.Models;
 using System.Reflection;
 
-namespace CustomCommandSystem.Common.Interfaces.Services
+namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface ICommandsLoader
     {

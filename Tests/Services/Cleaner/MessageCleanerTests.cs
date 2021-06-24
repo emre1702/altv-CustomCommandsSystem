@@ -1,8 +1,8 @@
-﻿using CustomCommandSystem.Services.Cleaner;
-using CustomCommandSystem.Services.Utils;
+﻿using CustomCommandsSystem.Services.Cleaner;
+using CustomCommandsSystem.Services.Utils;
 using NUnit.Framework;
 
-namespace CustomCommandSystem.Tests.Services.Cleaner
+namespace CustomCommandsSystem.Tests.Services.Cleaner
 {
     class MessageCleanerTests
     {

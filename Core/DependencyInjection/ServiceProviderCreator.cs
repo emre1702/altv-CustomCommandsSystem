@@ -1,14 +1,14 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Services;
-using CustomCommandSystem.Services.Cleaner;
-using CustomCommandSystem.Services.Executer;
-using CustomCommandSystem.Services.Loader;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Services;
+using CustomCommandsSystem.Services.Cleaner;
+using CustomCommandsSystem.Services.Executer;
+using CustomCommandsSystem.Services.Loader;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace CustomCommandSystem.Core.DependencyInjection
+namespace CustomCommandsSystem.Core.DependencyInjection
 {
     internal static class ServiceProviderCreator
     {

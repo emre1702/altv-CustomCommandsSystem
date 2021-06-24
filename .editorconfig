@@ -1,5 +1,3 @@
-# NOTE: Requires **VS2019 16.3** or later
-
 # Dead Code Rules
 # Description:
 
@@ -1380,3 +1378,5 @@ dotnet_diagnostic.IDE0083.severity = warning
 dotnet_diagnostic.IDE0090.severity = warning
 
 dotnet_diagnostic.NETSDK1138.severity = none
+[*.cs]
+csharp_prefer_static_local_function=true:suggestion

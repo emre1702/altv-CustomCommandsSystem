@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>CustomCommandSystem.Integration</AssemblyName>
-    <RootNamespace>CustomCommandSystem.Integration</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>CustomCommandsSystem.Integration</AssemblyName>
+    <RootNamespace>CustomCommandsSystem.Integration</RootNamespace>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>

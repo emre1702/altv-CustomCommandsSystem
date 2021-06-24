@@ -1,4 +1,4 @@
-﻿namespace CustomCommandSystem.Common.Delegates
+﻿namespace CustomCommandsSystem.Common.Delegates
 {
     internal delegate void EmptyDelegate();
 }

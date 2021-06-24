@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomCommandSystem.Common.Exceptions
+namespace CustomCommandsSystem.Common.Exceptions
 {
     internal class ExpectionWithoutOutput : Exception
     {

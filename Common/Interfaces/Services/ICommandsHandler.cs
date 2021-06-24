@@ -1,9 +1,9 @@
-﻿using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
 
-namespace CustomCommandSystem.Common.Interfaces.Services
+namespace CustomCommandsSystem.Common.Interfaces.Services
 {
     internal interface ICommandsHandler
     {
-        void ExecuteCommand(Player player, string message);
+        void ExecuteCommand(IPlayer player, string message);
     }
 }

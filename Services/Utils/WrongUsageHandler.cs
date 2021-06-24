@@ -1,13 +1,13 @@
-﻿using CustomCommandSystem.Common.Enums;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Enums;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CustomCommandSystem.Services.Parser
+namespace CustomCommandsSystem.Services.Parser
 {
     internal class WrongUsageHandler : IWrongUsageHandler
     {
@@ -18,7 +18,7 @@ namespace CustomCommandSystem.Services.Parser
             _configuration = configuration;
         }
 
-        public bool Handle(Player player, UserInputData userInputData, List<CommandMethodData> commandMethods, List<CommandMethodData> filteredMethods)
+        public bool Handle(IPlayer player, UserInputData userInputData, List<CommandMethodData> commandMethods, List<CommandMethodData> filteredMethods)
         {
             switch (_configuration.UsageOutputType)
             {
@@ -41,7 +41,7 @@ namespace CustomCommandSystem.Services.Parser
             return false;
         }
 
-        private bool OutputOneUsage(Player player, UserInputData userInputData, List<CommandMethodData> commandMethods)
+        private bool OutputOneUsage(IPlayer player, UserInputData userInputData, List<CommandMethodData> commandMethods)
         {
             var methodData = commandMethods.FirstOrDefault();
             if (methodData is null) return false;
@@ -54,7 +54,7 @@ namespace CustomCommandSystem.Services.Parser
             return true;
         }
 
-        private bool OutputMultipleUsages(Player player, UserInputData userInputData, List<CommandMethodData> commandMethods)
+        private bool OutputMultipleUsages(IPlayer player, UserInputData userInputData, List<CommandMethodData> commandMethods)
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(_configuration.MultipleUsagesOutputPrefix);

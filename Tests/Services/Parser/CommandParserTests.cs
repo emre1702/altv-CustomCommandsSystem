@@ -1,7 +1,7 @@
-﻿using CustomCommandSystem.Services.Parser;
+﻿using CustomCommandsSystem.Services.Parser;
 using NUnit.Framework;
 
-namespace CustomCommandSystem.Tests.Services.Parser
+namespace CustomCommandsSystem.Tests.Services.Parser
 {
     class CommandParserTests
     {

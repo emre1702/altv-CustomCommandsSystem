@@ -1,17 +1,18 @@
-﻿using CustomCommandSystem.Common.Delegates;
-using CustomCommandSystem.Common.Extensions;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
+﻿using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Delegates;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
-namespace CustomCommandSystem.Common.Datas
+namespace CustomCommandsSystem.Common.Datas
 {
     public static class DefaultConverters
     {
-        public static Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> Data { get; } 
-            = new Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)>
+        public static Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> Data(ICommandsConfiguration config) => new()
         {
             [typeof(bool)] = (1, (player, userInputData, args, cancelErrorMsgOnFail) => ParseBool(args[0])),
             [typeof(byte)] = (1, (player, userInputData, args, cancelErrorMsgOnFail) => byte.Parse(args[0])),
@@ -29,49 +30,22 @@ namespace CustomCommandSystem.Common.Datas
             [typeof(ushort)] = (1, (player, userInputData, args, cancelErrorMsgOnFail) => ushort.Parse(args[0])),
             [typeof(string)] = (1, (player, userInputData, args, cancelErrorMsgOnFail) => args[0]),
 
-            [typeof(GTANetworkAPI.Vector3)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Vector3(ParseDouble(args[0]), ParseDouble(args[1]), ParseDouble(args[2]))),
-            [typeof(GTANetworkAPI.Color)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Color(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
-            [typeof(GTANetworkAPI.ComponentVariation)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.ComponentVariation(int.Parse(args[0]), int.Parse(args[1]), int.Parse(args[2]))),
-            [typeof(GTANetworkAPI.Decoration)] = (2, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Decoration { Collection = uint.Parse(args[0]), Overlay = uint.Parse(args[1]) }),
-            [typeof(GTANetworkAPI.HeadBlend)] = (9, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.HeadBlend
-            {
-                ShapeFirst = byte.Parse(args[0]),
-                ShapeSecond = byte.Parse(args[1]),
-                ShapeThird = byte.Parse(args[2]),
-                SkinFirst = byte.Parse(args[3]),
-                SkinSecond = byte.Parse(args[4]),
-                SkinThird = byte.Parse(args[5]),
-                ShapeMix = ParseFloat(args[6]),
-                SkinMix = ParseFloat(args[7]),
-                ThirdMix = ParseFloat(args[8]),
-            }),
-            [typeof(GTANetworkAPI.HeadOverlay)] = (4, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.HeadOverlay
-            {
-                Index = byte.Parse(args[0]),
-                Opacity = ParseFloat(args[1]),
-                Color = byte.Parse(args[2]),
-                SecondaryColor = byte.Parse(args[3])
-            }),
-            [typeof(GTANetworkAPI.Quaternion)] = (4, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.Quaternion(ParseDouble(args[0]), ParseDouble(args[1]), ParseDouble(args[2]), ParseDouble(args[3]))),
-            [typeof(GTANetworkAPI.VehiclePaint)] = (2, (player, userInputData, args, cancelErrorMsgOnFail) => new GTANetworkAPI.VehiclePaint(int.Parse(args[0]), int.Parse(args[1]))),
-        };
+            [typeof(Position)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new Position(ParseFloat(args[0]), ParseFloat(args[1]), ParseFloat(args[2]))),
+            [typeof(Rgba)] = (4, (player, userInputData, args, cancelErrorMsgOnFail) => new Rgba(byte.Parse(args[0]), byte.Parse(args[1]), byte.Parse(args[2]), byte.Parse(args[3]))),
+            [typeof(DegreeRotation)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new DegreeRotation(ParseFloat(args[0]), ParseFloat(args[1]), ParseFloat(args[2]))),
+            [typeof(Rotation)] = (3, (player, userInputData, args, cancelErrorMsgOnFail) => new Rotation(ParseFloat(args[0]), ParseFloat(args[1]), ParseFloat(args[2]))),
 
-        public static Func<ICommandsConfiguration, Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)>> AsyncData { get; }
-            = (config) => new Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)>
+            [typeof(IPlayer)] = (1, (player, userInputData, args, cancelErrorMsgOnFail) =>
             {
-                [typeof(GTANetworkAPI.Player)] = (1, async (player, userInputData, args, cancelErrorMsgOnFail) =>
+                var target = AltV.Net.Alt.GetAllPlayers().FirstOrDefault(p => p.Name == args[0]);
+                if (target is null && config.PlayerNotFoundErrorMessage is { } text)
                 {
-                    var target = await GTANetworkAPI.NAPI.Task.RunWait(() => GTANetworkAPI.NAPI.Player.GetPlayerFromName(args[0]));
-                    if (target is null && config.PlayerNotFoundErrorMessage is { } text)
-                    {
-                        cancelErrorMsgOnFail.Cancel = true;
-                        config.MessageOutputHandler.Invoke(new CommandOutputData(player, text, userInputData));
-                    }
-                    return target;
+                    cancelErrorMsgOnFail.Cancel = true;
+                    config.MessageOutputHandler.Invoke(new CommandOutputData(player, text, userInputData));
                 }
-                ),
-            };
-
+                return target;
+            })
+        };
                 
 
         private static bool ParseBool(string val) 

@@ -1,4 +1,4 @@
-﻿namespace CustomCommandSystem.Common.Models
+﻿namespace CustomCommandsSystem.Common.Models
 {
     public class CustomCommandInfo
     {

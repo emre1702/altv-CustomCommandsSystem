@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CustomCommandSystem.Tests.Services.Parser.Data
+namespace CustomCommandsSystem.Tests.Services.Parser.Data
 {
     internal class TestClassForArgumentsConverter : IEquatable<TestClassForArgumentsConverter>
     {

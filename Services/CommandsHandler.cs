@@ -1,12 +1,12 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Utils;
+using AltV.Net.Elements.Entities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace CustomCommandSystem.Services
+namespace CustomCommandsSystem.Services
 {
     internal class CommandsHandler : ICommandsHandler
     {
@@ -36,7 +36,7 @@ namespace CustomCommandSystem.Services
             Instance = this;
         }
 
-        public async void ExecuteCommand(Player player, string message)
+        public async void ExecuteCommand(IPlayer player, string message)
         {
             message = _cleaner.Clean(message);
             var (command, remainingMessage) = _commandParser.Parse(message);
@@ -51,7 +51,7 @@ namespace CustomCommandSystem.Services
             await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, possibleMethods);
         }
 
-        private bool TryGetCommandData(Player player, UserInputData userInputData, [NotNullWhen(true)] out CommandData? commandData)
+        private bool TryGetCommandData(IPlayer player, UserInputData userInputData, [NotNullWhen(true)] out CommandData? commandData)
         {
             commandData = _commandsLoader.GetCommandData(userInputData.Command);
 
@@ -61,7 +61,7 @@ namespace CustomCommandSystem.Services
             return !(commandData is null);
         }
 
-        private bool TryGetPossibleMethods(Player player, UserInputData userInputData, string[] usedParameters, CommandData commandData, [NotNullWhen(true)] out List<CommandMethodData>? possibleMethods)
+        private bool TryGetPossibleMethods(IPlayer player, UserInputData userInputData, string[] usedParameters, CommandData commandData, [NotNullWhen(true)] out List<CommandMethodData>? possibleMethods)
         {
             if (commandData is null)
             {

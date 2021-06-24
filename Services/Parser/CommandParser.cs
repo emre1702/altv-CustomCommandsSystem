@@ -1,6 +1,6 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
 
-namespace CustomCommandSystem.Services.Parser
+namespace CustomCommandsSystem.Services.Parser
 {
     internal class CommandParser : ICommandParser
     {

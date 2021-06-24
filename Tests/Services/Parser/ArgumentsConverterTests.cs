@@ -1,20 +1,24 @@
-﻿using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Parser;
-using CustomCommandSystem.Services.Utils;
-using CustomCommandSystem.Tests.Services.Parser.Data;
-using GTANetworkAPI;
+﻿using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Parser;
+using CustomCommandsSystem.Services.Utils;
+using CustomCommandsSystem.Tests.Services.Parser.Data;
+using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomCommandSystem.Tests.Services.Parser
+namespace CustomCommandsSystem.Tests.Services.Parser
 {
     class ArgumentsConverterTests
     {
         #nullable disable
         private ArgumentsConverter _argumentsConverter;
+        private IPlayer _player;
         #nullable restore
 
         [OneTimeSetUp]
@@ -22,6 +26,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
         {
             var configuration = new CommandsConfiguration();
             _argumentsConverter = new ArgumentsConverter(configuration);
+            _player = Substitute.For<IPlayer>();
         }
         
 
@@ -52,7 +57,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesAndTypes.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesAndTypes[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new("", "", values), i, valuesAndTypes[i].Item3, new());
                 Assert.AreEqual(valuesAndTypes[i].Item2, convertedValue);
                 Assert.AreEqual(1, lengthUsed);
                 i += lengthUsed;
@@ -66,25 +71,16 @@ namespace CustomCommandSystem.Tests.Services.Parser
             {
                 ("true", true, typeof(bool), 1),
                 ("false", false, typeof(bool), 1),
-                ("255.31 0.5 254", new Vector3(255.31, 0.5, 254), typeof(Vector3), 3),
-                ("255 0 0", new Color(255, 0, 0), typeof(Color), 3)
+                ("255.31 0.5 254", new Position(255.31f, 0.5f, 254), typeof(Position), 3),
+                ("255 0 0", new Rgba(255, 0, 0, 5), typeof(Rgba), 3)
 
             };
             var values = valuesTypesAndLengths.SelectMany(e => e.Item1.Split(' ')).ToArray();
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
-                if (convertedValue is Vector3 convertedVector3)
-                {
-                    var vector3 = (Vector3)valuesTypesAndLengths[i].Item2;
-                    Assert.AreEqual(vector3.X, convertedVector3.X, 0.01);
-                    Assert.AreEqual(vector3.Y, convertedVector3.Y, 0.01);
-                    Assert.AreEqual(vector3.Z, convertedVector3.Z, 0.01);
-                } 
-                else
-                    Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
-
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
             }
@@ -107,7 +103,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
@@ -131,7 +127,7 @@ namespace CustomCommandSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(new Player(new NetHandle()), new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;

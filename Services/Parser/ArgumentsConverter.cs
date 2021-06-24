@@ -1,14 +1,15 @@
-﻿using CustomCommandSystem.Common.Datas;
-using CustomCommandSystem.Common.Delegates;
-using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
-using CustomCommandSystem.Services.Utils;
-using GTANetworkAPI;
+﻿using CustomCommandsSystem.Common.Datas;
+using CustomCommandsSystem.Common.Delegates;
+using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
+using CustomCommandsSystem.Services.Utils;
+using AltV.Net.Elements.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
-namespace CustomCommandSystem.Services.Parser
+namespace CustomCommandsSystem.Services.Parser
 {
     internal class ArgumentsConverter : ICommandArgumentsConverter
     {
@@ -19,12 +20,13 @@ namespace CustomCommandSystem.Services.Parser
 #nullable restore
 
         private readonly Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)> _asyncConverters;
-        private readonly Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> _converters = DefaultConverters.Data;
+        private readonly Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> _converters;
         
 
         public ArgumentsConverter(ICommandsConfiguration config)
         {
-            _asyncConverters = DefaultConverters.AsyncData(config);
+            _converters = DefaultConverters.Data(config);
+            _asyncConverters = new();
             Instance = this;
         }
 
@@ -46,7 +48,7 @@ namespace CustomCommandSystem.Services.Parser
             ConverterChanged?.Invoke();
         }
 
-        public async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> Convert(Player player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
+        public async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> Convert(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
         {
             var asyncResult = await TryConvertAsync(player, userInputData, atIndex, toType, errorMessageCancel);
             if (asyncResult.AmountArgsUsed > 0) return asyncResult;
@@ -66,7 +68,7 @@ namespace CustomCommandSystem.Services.Parser
             return (ret, converterData.ArgsLength);
         }
 
-        private async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> TryConvertAsync(Player player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
+        private async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> TryConvertAsync(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
         {
             (int ArgsLength, AsyncConverterDelegate Converter) converterData;
             lock (_asyncConverters)

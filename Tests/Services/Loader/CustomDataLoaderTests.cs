@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace CustomCommandSystem.Tests.Services.Loader
+namespace CustomCommandsSystem.Tests.Services.Loader
 {
     class CustomDataLoaderTests
     {

@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>CustomCommandSystem.Common</AssemblyName>
-    <RootNamespace>CustomCommandSystem.Common</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>CustomCommandsSystem.Common</AssemblyName>
+    <RootNamespace>CustomCommandsSystem.Common</RootNamespace>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RAGEMP-Bootstrapper" Version="1.1.3" />
+    <PackageReference Include="AltV.Net" Version="2.0.8" />
+    <PackageReference Include="AltV.Net.Async" Version="2.0.8" />
+    <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.48.0" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 

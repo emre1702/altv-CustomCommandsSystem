@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomCommandSystem.Common.Attributes
+namespace CustomCommandsSystem.Common.Attributes
 {
     /// <summary>
     ///     Mark a method as command method.

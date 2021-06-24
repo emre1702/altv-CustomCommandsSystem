@@ -1,6 +1,6 @@
-﻿using CustomCommandSystem.Services.Executer;
+﻿using CustomCommandsSystem.Services.Executer;
 
-namespace CustomCommandSystem.Integration
+namespace CustomCommandsSystem.Integration
 {
     internal class Main
     {

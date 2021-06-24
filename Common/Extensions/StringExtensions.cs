@@ -1,4 +1,4 @@
-﻿namespace CustomCommandSystem.Common.Extensions
+﻿namespace CustomCommandsSystem.Common.Extensions
 {
     internal static class StringExtensions
     {

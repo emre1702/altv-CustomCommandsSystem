@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomCommandSystem.Common.Attributes
+namespace CustomCommandsSystem.Common.Attributes
 {
     /// <summary>
     ///     Define one or more aliases for a command method.

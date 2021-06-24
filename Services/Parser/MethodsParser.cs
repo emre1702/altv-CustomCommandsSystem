@@ -1,10 +1,10 @@
-﻿using CustomCommandSystem.Common.Interfaces.Services;
-using CustomCommandSystem.Common.Models;
+﻿using CustomCommandsSystem.Common.Interfaces.Services;
+using CustomCommandsSystem.Common.Models;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace CustomCommandSystem.Services.Parser
+namespace CustomCommandsSystem.Services.Parser
 {
     internal class MethodsParser : ICommandMethodsParser
     {
