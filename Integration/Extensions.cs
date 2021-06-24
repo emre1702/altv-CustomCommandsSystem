@@ -1,5 +1,5 @@
-﻿using AltV.Net.Elements.Entities;
-using AltV.Net.Resources.Chat.Api;
+﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using CustomCommandsSystem.Common.Delegates;
 using CustomCommandsSystem.Services;
 using CustomCommandsSystem.Services.Loader;
@@ -14,7 +14,7 @@ namespace CustomCommandsSystem.Integration
     {
         static Extensions()
         {
-            new Main();
+            _ = new Main();
         }
 
         /// <summary>
@@ -43,27 +43,27 @@ namespace CustomCommandsSystem.Integration
         ///         </item>
         ///     </list></para>
         /// </remarks>
-        public static void RegisterCustomCommand(this Command command)
-            => RegisterCustom(command, Assembly.GetCallingAssembly());
+        public static void RegisterCustomCommand(this IServer core)
+            => RegisterCustomCommand(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Registers all commands (doesn't matter if private, static, not static etc.) in the specified assembly.
         /// </summary>
-        /// <inheritdoc cref="RegisterCustom(Command)" path="/remarks"/>
+        /// <inheritdoc cref="RegisterCustom(IServer)" path="/remarks"/>
         /// <param name="assembly"/>
-        public static void RegisterCustom(this Command _, Assembly assembly)
+        public static void RegisterCustomCommand(this IServer _, Assembly assembly)
             => CommandsLoader.Instance?.LoadCommands(assembly);
 
         /// <summary>
         ///     Unregisters all commands in the current assembly.
         /// </summary>
-        public static void UnregisterCustom(this Command napiCommand)
-            => UnregisterCustom(napiCommand, Assembly.GetCallingAssembly());
+        public static void UnregisterCustomCommand(this IServer core)
+            => UnregisterCustomCommand(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Unregisters all commands in the specified assembly.
         /// </summary>
-        public static void UnregisterCustom(this Command _, Assembly assembly)
+        public static void UnregisterCustomCommand(this IServer _, Assembly assembly)
             => CommandsLoader.Instance?.UnloadCommands(assembly);
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace CustomCommandsSystem.Integration
         ///     Return of the converter needs to be of type <typeparamref name="T"/>
         ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetConverter<T>(this Command _, int amountArgumentsNeeded, ConverterDelegate converter)
+        public static void SetCustomCommandConverter<T>(this IServer _, int amountArgumentsNeeded, ConverterDelegate converter)
           => ArgumentsConverter.Instance.SetConverter(typeof(T), amountArgumentsNeeded, converter);
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace CustomCommandsSystem.Integration
         ///     Return of the converter needs to be of type <see cref="Task{T}" /> of <typeparamref name="T"/>.
         ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetAsyncConverter<T>(this Command _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter)
+        public static void SetCustomCommandAsyncConverter<T>(this IServer _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter)
           => ArgumentsConverter.Instance.SetAsyncConverter(typeof(T), amountArgumentsNeeded, asyncConverter);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace CustomCommandsSystem.Integration
         /// </summary>
         /// <param name="player">Player to be passed to the command methods and to be error messages to.</param>
         /// <param name="command">The command with prefix or without prefix.</param>
-        public static void Execute(this Command _, IPlayer player, string command)
+        public static void ExecuteCustomCommand(this IServer _, IPlayer player, string command)
             => CommandsHandler.Instance?.ExecuteCommand(player, command);
     }
 }

@@ -6,10 +6,10 @@ namespace CustomCommandsSystem.Integration
     {
         public Main()
         {
-            new Core.Init();
+            _ = new Core.Init();
             MethodExecuter.BeforeCommandExecute = Events.OnBeforeCommandExecute;
             MethodExecuter.AfterCommandExecute = Events.OnAfterCommandExecute;
-            new ClientEvents();
+            _ = new ClientEvents();
         }
     }
 }
