@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>altV-CustomCommandsSystem</id>
-    <version>1.1.0</version>
+    <version>1.0.0</version>
     <title>Custom commands system for alt:V</title>
     <authors>Bonus (emre1702)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
