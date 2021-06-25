@@ -92,5 +92,26 @@ namespace CustomCommandsSystem.Tests.Services.Executer
 
             return _stringWriter.ToString();
         }
+
+        [Test]
+        public void GetSuitableMethodInfo_ExceptionIsCatched()
+        {
+            var commandData = _commandsLoader.GetCommandData("Test3false")!;
+            var methods = _methodParser.GetPossibleMethods("Test3false", new string[] { "a", "b", "0", "1", "2", "true", "5", "6" }, commandData);
+
+            var config = new CommandsConfiguration { RunCommandMethodInMainThread = false };
+            var argumentsParser = Substitute.For<ICommandArgumentsParser>();
+            argumentsParser.ParseInvokeArguments(Arg.Any<IPlayer>(), Arg.Any<CommandMethodData>(), Arg.Any<UserInputData>())
+#pragma warning disable CS0162 // Unreachable code detected
+                .ReturnsForAnyArgs((x) => { throw new Exception(); return null; });
+#pragma warning restore CS0162 // Unreachable code detected
+            var wrongUsageHandler = new WrongUsageHandler(config);
+            _methodExecuter = new MethodExecuter(argumentsParser, config, wrongUsageHandler);
+
+            Assert.DoesNotThrowAsync(async () => await _methodExecuter.GetSuitableMethodInfo(null!, new()
+            {
+                new(methods.First().Method, null!, 0)
+            }, new("Test3false", "Test3false hello", new string[] { "hello" })));
+        }
     }
 }

@@ -97,5 +97,12 @@ namespace CustomCommandsSystem.Tests.Services
 
             return output;
         }
+
+        [Test]
+        public void ExecuteCommand_ThrowsNoExceptionOnInvalidTypes()
+        {
+            var cmd = "output Normal Text";
+            Assert.DoesNotThrow(() => _commandsHandler.ExecuteCommand(_player, cmd));
+        }
     }
 }
