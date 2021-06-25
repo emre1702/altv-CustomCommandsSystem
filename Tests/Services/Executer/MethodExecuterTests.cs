@@ -1,5 +1,4 @@
 ﻿using AltV.Net.Elements.Entities;
-using CustomCommandsSystem.Common.Extensions;
 using CustomCommandsSystem.Common.Interfaces.Services;
 using CustomCommandsSystem.Common.Models;
 using CustomCommandsSystem.Common.Utils;
@@ -10,7 +9,6 @@ using CustomCommandsSystem.Services.Utils;
 using NSubstitute;
 using NUnit.Framework;
 using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
