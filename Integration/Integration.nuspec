@@ -8,6 +8,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <repository type="git" branch="master" url="https://github.com/emre1702/altv-CustomCommandsSystem" />
+    <projectUrl>https://github.com/emre1702/altv-CustomCommandsSystem/wiki</projectUrl>
     <description>
       Create custom commands in alt:V with C#.
       Read more about it in the Readme in GitHub.
