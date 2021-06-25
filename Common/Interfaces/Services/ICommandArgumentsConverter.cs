@@ -11,9 +11,9 @@ namespace CustomCommandsSystem.Common.Interfaces.Services
     {
         event EmptyDelegate? ConverterChanged;
 
-        ValueTask<(object? ConvertedValue, int AmountArgsUsed)> Convert(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel);
-        void SetAsyncConverter(Type forType, int argumentsLength, AsyncConverterDelegate asyncConverter);
-        void SetConverter(Type forType, int argumentsLength, ConverterDelegate converter);
+        ValueTask<(object? ConvertedValue, int AmountArgsUsed, bool? AllowNull)> Convert(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel);
+        void SetAsyncConverter(Type forType, int argumentsLength, AsyncConverterDelegate asyncConverter, bool? allowNull = false);
+        void SetConverter(Type forType, int argumentsLength, ConverterDelegate converter, bool? allowNull = false);
         internal int? GetTypeArgumentsLength(Type type); 
     }
 }

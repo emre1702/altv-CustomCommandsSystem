@@ -19,8 +19,8 @@ namespace CustomCommandsSystem.Services.Parser
         internal static ArgumentsConverter Instance { get; private set; }
 #nullable restore
 
-        private readonly Dictionary<Type, (int ArgsLength, AsyncConverterDelegate Converter)> _asyncConverters;
-        private readonly Dictionary<Type, (int ArgsLength, ConverterDelegate Converter)> _converters;
+        private readonly Dictionary<Type, (int ArgsLength, bool? AllowNull, AsyncConverterDelegate Converter)> _asyncConverters;
+        private readonly Dictionary<Type, (int ArgsLength, bool? AllowNull, ConverterDelegate Converter)> _converters;
         
 
         public ArgumentsConverter(ICommandsConfiguration config)
@@ -30,56 +30,56 @@ namespace CustomCommandsSystem.Services.Parser
             Instance = this;
         }
 
-        public void SetAsyncConverter(Type forType, int argumentsLength, AsyncConverterDelegate asyncConverter)
+        public void SetAsyncConverter(Type forType, int argumentsLength, AsyncConverterDelegate asyncConverter, bool? allowNull = false)
         {
             lock (_converters)
             {
-                _asyncConverters[forType] = (argumentsLength, asyncConverter);
+                _asyncConverters[forType] = (argumentsLength, allowNull, asyncConverter);
             }
             ConverterChanged?.Invoke();
         }
 
-        public void SetConverter(Type forType, int argumentsLength, ConverterDelegate converter)
+        public void SetConverter(Type forType, int argumentsLength, ConverterDelegate converter, bool? allowNull = false)
         {
             lock (_converters)
             {
-                _converters[forType] = (argumentsLength, converter);
+                _converters[forType] = (argumentsLength, allowNull, converter);
             }
             ConverterChanged?.Invoke();
         }
 
-        public async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> Convert(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
+        public async ValueTask<(object? ConvertedValue, int AmountArgsUsed, bool? AllowNull)> Convert(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
         {
             var asyncResult = await TryConvertAsync(player, userInputData, atIndex, toType, errorMessageCancel);
             if (asyncResult.AmountArgsUsed > 0) return asyncResult;
 
-            (int ArgsLength, ConverterDelegate Converter) converterData;
+            (int ArgsLength, bool? AllowNull, ConverterDelegate Converter) converterData;
             lock (_converters)
             {
                 if (!_converters.TryGetValue(toType, out converterData))
-                    return (System.Convert.ChangeType(userInputData.Arguments[atIndex], toType), 1);
+                    return (System.Convert.ChangeType(userInputData.Arguments[atIndex], toType), 1, null);
             }
 
             var argsToUse = new ArraySegment<string>(userInputData.Arguments, atIndex, converterData.ArgsLength);
             var ret = converterData.Converter(player, userInputData, argsToUse, errorMessageCancel);
 
             if (ret is Task<object> task)
-                return (await task, converterData.ArgsLength);
-            return (ret, converterData.ArgsLength);
+                return (await task, converterData.ArgsLength, converterData.AllowNull);
+            return (ret, converterData.ArgsLength, converterData.AllowNull);
         }
 
-        private async ValueTask<(object? ConvertedValue, int AmountArgsUsed)> TryConvertAsync(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
+        private async ValueTask<(object? ConvertedValue, int AmountArgsUsed, bool? AllowNull)> TryConvertAsync(IPlayer player, UserInputData userInputData, int atIndex, Type toType, CancelEventArgs errorMessageCancel)
         {
-            (int ArgsLength, AsyncConverterDelegate Converter) converterData;
+            (int ArgsLength, bool? AllowNull, AsyncConverterDelegate Converter) converterData;
             lock (_asyncConverters)
             {
                 if (!_asyncConverters.TryGetValue(toType, out converterData))
-                    return (null, 0);
+                    return (null, 0, null);
             }
             var argsToUse = new ArraySegment<string>(userInputData.Arguments, atIndex, converterData.ArgsLength);
             var ret = converterData.Converter(player, userInputData, argsToUse, errorMessageCancel);
 
-            return (await ret, converterData.ArgsLength);
+            return (await ret, converterData.ArgsLength, converterData.AllowNull);
         }
 
         int? ICommandArgumentsConverter.GetTypeArgumentsLength(Type type)

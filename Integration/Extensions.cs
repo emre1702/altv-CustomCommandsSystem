@@ -43,27 +43,27 @@ namespace CustomCommandsSystem.Integration
         ///         </item>
         ///     </list></para>
         /// </remarks>
-        public static void RegisterCustomCommand(this IServer core)
-            => RegisterCustomCommand(core, Assembly.GetCallingAssembly());
+        public static void RegisterCustomCommands(this IServer core)
+            => RegisterCustomCommands(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Registers all commands (doesn't matter if private, static, not static etc.) in the specified assembly.
         /// </summary>
         /// <inheritdoc cref="RegisterCustom(IServer)" path="/remarks"/>
         /// <param name="assembly"/>
-        public static void RegisterCustomCommand(this IServer _, Assembly assembly)
+        public static void RegisterCustomCommands(this IServer _, Assembly assembly)
             => CommandsLoader.Instance?.LoadCommands(assembly);
 
         /// <summary>
         ///     Unregisters all commands in the current assembly.
         /// </summary>
-        public static void UnregisterCustomCommand(this IServer core)
-            => UnregisterCustomCommand(core, Assembly.GetCallingAssembly());
+        public static void UnregisterCustomCommands(this IServer core)
+            => UnregisterCustomCommands(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Unregisters all commands in the specified assembly.
         /// </summary>
-        public static void UnregisterCustomCommand(this IServer _, Assembly assembly)
+        public static void UnregisterCustomCommands(this IServer _, Assembly assembly)
             => CommandsLoader.Instance?.UnloadCommands(assembly);
 
         /// <summary>
@@ -77,8 +77,15 @@ namespace CustomCommandsSystem.Integration
         ///     Return of the converter needs to be of type <typeparamref name="T"/>
         ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetCustomCommandConverter<T>(this IServer _, int amountArgumentsNeeded, ConverterDelegate converter)
-          => ArgumentsConverter.Instance.SetConverter(typeof(T), amountArgumentsNeeded, converter);
+        /// <param name="allowNull">
+        ///     Is it allowed for the converter to return null?<br/>
+        ///     Set null to make it depending on the nullability of the type.<br/>
+        ///     E.g. int is not nullable so a <see langword="null"/> return would tell the code to ignore that method.<br/>
+        ///     To make reference types nullable, enable nullable in your project.<br/>
+        ///     Default: false
+        /// </param>
+        public static void SetCustomCommandsConverter<T>(this IServer _, int amountArgumentsNeeded, ConverterDelegate converter, bool? allowNull = false)
+          => ArgumentsConverter.Instance.SetConverter(typeof(T), amountArgumentsNeeded, converter, allowNull);
 
         /// <summary>
         ///     Adds an async converter for a type to be able to use that type in a command.
@@ -91,8 +98,15 @@ namespace CustomCommandsSystem.Integration
         ///     Return of the converter needs to be of type <see cref="Task{T}" /> of <typeparamref name="T"/>.
         ///     Use the CancelEventArgs if you want to output the error message by yourself (like "Player not found").
         /// </param>
-        public static void SetCustomCommandAsyncConverter<T>(this IServer _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter)
-          => ArgumentsConverter.Instance.SetAsyncConverter(typeof(T), amountArgumentsNeeded, asyncConverter);
+        /// <param name="allowNull">
+        ///     Is it allowed for the converter to return null?<br/>
+        ///     Set null to make it depending on the nullability of the type.<br/>
+        ///     E.g. int is not nullable so a <see langword="null"/> return would tell the code to ignore that method.<br/>
+        ///     To make reference types nullable, enable nullable in your project.<br/>
+        ///     Default: false
+        /// </param>
+        public static void SetCustomCommandsAsyncConverter<T>(this IServer _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter, bool? allowNull = false)
+          => ArgumentsConverter.Instance.SetAsyncConverter(typeof(T), amountArgumentsNeeded, asyncConverter, allowNull);
 
         /// <summary>
         ///     Executes a command.

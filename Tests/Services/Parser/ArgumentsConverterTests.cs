@@ -57,7 +57,7 @@ namespace CustomCommandsSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesAndTypes.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new("", "", values), i, valuesAndTypes[i].Item3, new());
+                var (convertedValue, lengthUsed, allowNull) = await _argumentsConverter.Convert(_player, new("", "", values), i, valuesAndTypes[i].Item3, new());
                 Assert.AreEqual(valuesAndTypes[i].Item2, convertedValue);
                 Assert.AreEqual(1, lengthUsed);
                 i += lengthUsed;
@@ -79,7 +79,7 @@ namespace CustomCommandsSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed, allowNull) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
@@ -103,7 +103,7 @@ namespace CustomCommandsSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed, allowNull) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;
@@ -127,7 +127,7 @@ namespace CustomCommandsSystem.Tests.Services.Parser
 
             for (int i = 0; i < valuesTypesAndLengths.Count;)
             {
-                var (convertedValue, lengthUsed) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
+                var (convertedValue, lengthUsed, allowNull) = await _argumentsConverter.Convert(_player, new UserInputData("", "", values), i, valuesTypesAndLengths[i].Item3, new CancelEventArgs());
                 Assert.AreEqual(valuesTypesAndLengths[i].Item2, convertedValue);
                 Assert.AreEqual(valuesTypesAndLengths[i].Item4, lengthUsed);
                 i += lengthUsed;

@@ -56,7 +56,7 @@ namespace CustomCommandsSystem.Services.Executer
             return true;
         }
 
-        private async Task<SuitableMethodInfo> GetSuitableMethodInfo(IPlayer player, List<CommandMethodData> possibleMethods, UserInputData userInputData)
+        internal async Task<SuitableMethodInfo> GetSuitableMethodInfo(IPlayer player, List<CommandMethodData> possibleMethods, UserInputData userInputData)
         {
             var outputCommandUsedWrongIfNoneFound = false;
             foreach (var possibleMethod in possibleMethods)

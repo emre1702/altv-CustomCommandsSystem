@@ -16,7 +16,7 @@ namespace CustomCommandsSystem.Services.Parser
             => _argumentsConverter = argumentsConverter;
 
         public string[] ParseUserArguments(string remainingMessageWithoutCmd)
-            => string.IsNullOrEmpty(remainingMessageWithoutCmd) ? new string[0] : remainingMessageWithoutCmd.Split(' ');
+            => string.IsNullOrEmpty(remainingMessageWithoutCmd) ? Array.Empty<string>() : remainingMessageWithoutCmd.Split(' ');
 
         public async IAsyncEnumerable<object?> ParseInvokeArguments(IPlayer player, CommandMethodData commandMethodData, UserInputData userInputData)
         {
@@ -46,14 +46,21 @@ namespace CustomCommandsSystem.Services.Parser
                 }
                 else
                 {
-                    var (convertedArg, amountArgsUsed) = await _argumentsConverter.Convert(player, userInputData, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
-                    if (convertedArg is null && !methodParameter.IsNullable)
+                    var (convertedArg, amountArgsUsed, allowNull) = await _argumentsConverter.Convert(player, userInputData, userArgIndex, methodParameter.Type, cmdErrorOnNullCancel);
+                    if (!IsConvertedArgResultAllowed(convertedArg, methodParameter, allowNull))
                         ThrowError(cmdErrorOnNullCancel);
                     cmdErrorOnNullCancel.Cancel = false;
                     yield return convertedArg;
                     userArgIndex += amountArgsUsed;
                 }
             }
+        }
+
+        private bool IsConvertedArgResultAllowed(object? convertedArg, CommandParameterData methodParameter, bool? allowNull)
+        {
+            if (convertedArg is not null) return true;
+            if (allowNull is null) return methodParameter.IsNullable;
+            return allowNull == true;
         }
 
         private void ThrowError(CancelEventArgs cmdErrorOnNullCancel)
