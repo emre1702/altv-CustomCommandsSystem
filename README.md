@@ -29,6 +29,6 @@ You want more? Add an [issue](https://github.com/emre1702/altv-CustomCommandsSys
 ## How do I use it?
 
 1. Install the [NuGet package](https://www.nuget.org/packages/altv-CustomCommandsSystem/) 
-2. Implement it. Use the [Wiki](https://github.com/emre1702/altv-CustomCommandsSystem/wiki) for information.
+2. Implement it in an AsyncResource. Use the [Wiki](https://github.com/emre1702/altv-CustomCommandsSystem/wiki) for information.
 
 
