@@ -20,9 +20,7 @@ namespace CustomCommandsSystem.Tests.Services
     class CommandsHandlerTests
     {
 #nullable disable
-        private StringWriter _stringWriter;
         private CommandsConfiguration _configuration;
-        private IPlayer _player;
         private CommandsHandler _commandsHandler;
 
 #nullable enable
@@ -31,7 +29,6 @@ namespace CustomCommandsSystem.Tests.Services
         public void OneTimeSetUp()
         {
             _configuration = new CommandsConfiguration { RunCommandMethodInMainThread = false };
-            _player = Substitute.For<IPlayer>();
             var cleaner = new MessageCleaner(_configuration);
             var commandParser = new CommandParser();
             var argumentsConverter = new ArgumentsConverter(_configuration);
@@ -48,20 +45,6 @@ namespace CustomCommandsSystem.Tests.Services
             argumentsConverter.SetConverter(typeof(OutputTestModel), 2, (player, inputData, args, cancel) => new OutputTestModel { Id = int.Parse(args[0]), AnyString = args[1] });
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            _stringWriter.Dispose();
-            ConsoleUtils.ResetOut();
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            _stringWriter = new StringWriter();
-            Console.SetOut(_stringWriter);
-        }
-
         [Test]
         [TestCase("/output test test test test", ExpectedResult = "Output 1 test test test test")]
         [TestCase("/console 5 test test test", ExpectedResult = "Output 2 5 test test test")]
@@ -69,9 +52,13 @@ namespace CustomCommandsSystem.Tests.Services
         [TestCase("/ConsoleOutput", ExpectedResult = "Output empty called")]
         public string ExecuteCommand_TestCommandsWork(string cmd)
         {
-            _commandsHandler.ExecuteCommand(_player, cmd);
+            var player = Substitute.For<IPlayer>();
+            string message = string.Empty;
+            player.When(p => p.SetData(Arg.Any<string>(), Arg.Any<object>())).Do(x => message = x[0].ToString()!);
 
-            return _stringWriter.ToString()!;
+            _commandsHandler.ExecuteCommand(player, cmd);
+
+            return message;
         }
 
         [Test]
@@ -87,13 +74,14 @@ namespace CustomCommandsSystem.Tests.Services
         [TestCase("Test4", false, "null", UsageOutputType.OneUsageOnWrongTypes, ExpectedResult = "The command was used incorrectly.")]
         public string ExecuteCommand_OutputsUsage(string cmd, bool addDefaultValues, string nullValueName, UsageOutputType usageOutputType)
         {
+            var player = Substitute.For<IPlayer>();
             var output = string.Empty;
             _configuration.MessageOutputHandler = (data) => output = data.MessageToOutput;
             _configuration.UsageAddDefaultValues = addDefaultValues;
             _configuration.NullDefaultValueName = nullValueName;
             _configuration.UsageOutputType = usageOutputType;
 
-            _commandsHandler.ExecuteCommand(_player, cmd);
+            _commandsHandler.ExecuteCommand(player, cmd);
 
             return output;
         }
@@ -101,8 +89,9 @@ namespace CustomCommandsSystem.Tests.Services
         [Test]
         public void ExecuteCommand_ThrowsNoExceptionOnInvalidTypes()
         {
+            var player = Substitute.For<IPlayer>();
             var cmd = "output Normal Text";
-            Assert.DoesNotThrow(() => _commandsHandler.ExecuteCommand(_player, cmd));
+            Assert.DoesNotThrow(() => _commandsHandler.ExecuteCommand(player, cmd));
         }
     }
 }

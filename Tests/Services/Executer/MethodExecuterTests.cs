@@ -20,14 +20,13 @@ namespace CustomCommandsSystem.Tests.Services.Executer
     class MethodExecuterTests
     {
 #nullable disable
-        private StringWriter _stringWriter;
         private MethodsParser _methodParser;
         private MethodExecuter _methodExecuter;
         private ICommandsLoader _commandsLoader;
 #nullable restore
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
             AltAsyncUtils.InTest = true;
             var config = new CommandsConfiguration { RunCommandMethodInMainThread = false };
@@ -42,20 +41,6 @@ namespace CustomCommandsSystem.Tests.Services.Executer
             _methodExecuter = new MethodExecuter(argumentsParser, config, wrongUsageHandler);
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            _stringWriter?.Dispose();
-            ConsoleUtils.ResetOut();
-        }
-
-        [SetUp]
-        public void CreateNewStringWriter()
-        {
-            _stringWriter = new StringWriter();
-            Console.SetOut(_stringWriter);
-        }
-
         [Test]
         public async Task TryExecuteSuitable_ExecutesCorrectMethod()
         {
@@ -63,14 +48,13 @@ namespace CustomCommandsSystem.Tests.Services.Executer
             var arguments = new string[] { "5", "hallo", "123", "123", "123" };
             var commandData = _commandsLoader.GetCommandData("Test4")!;
             var methods = _methodParser.GetPossibleMethods("Test4", arguments, commandData);
+            var message = string.Empty;
 
             var userInputData = new UserInputData("Test4", "Test4 " + string.Join(' ', arguments), arguments);
             var result = await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, methods.ToList());
 
             Assert.IsTrue(result);
-            Assert.AreEqual("Test4Static called 5 - hallo 123 123 123", _stringWriter.ToString());
-
-            ConsoleUtils.ResetOut();
+            player.Received().SetData("Test4Static called 5 - hallo 123 123 123", Arg.Any<object>());
         }
 
         [Test]
@@ -81,7 +65,10 @@ namespace CustomCommandsSystem.Tests.Services.Executer
         public async Task<string> TryExecuteSuitable_ChecksRequirementAttribute(string cmd, string arg)
         {
             var player = Substitute.For<IPlayer>();
-            var args = arg.Length > 0 ? new string[] { arg } : new string[0];
+            var args = arg.Length > 0 ? new string[] { arg } : Array.Empty<string>();
+            string message = string.Empty;
+            player.When(p => p.SetData(Arg.Any<string>(), Arg.Any<object>())).Do(x => message = x[0].ToString()!);
+
             var commandData = _commandsLoader.GetCommandData(cmd)!;
             var methods = _methodParser.GetPossibleMethods(cmd, args, commandData);
 
@@ -90,7 +77,7 @@ namespace CustomCommandsSystem.Tests.Services.Executer
 
             Assert.IsTrue(result);
 
-            return _stringWriter.ToString();
+            return message;
         }
 
         [Test]

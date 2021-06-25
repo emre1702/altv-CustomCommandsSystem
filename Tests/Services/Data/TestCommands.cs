@@ -93,7 +93,7 @@ namespace CustomCommandsSystem.Tests.Services.Data
         [CustomCommand("Test4", 10)]
         public static void Test4Static(IPlayer player, int a, [CustomCommandRemainingText] string b)
         {
-            Console.Write("Test4Static called " + a + " - " + b);
+            player.SetData("Test4Static called " + a + " - " + b, true);
         }
 
         [CustomCommand("Test4")]
@@ -106,35 +106,35 @@ namespace CustomCommandsSystem.Tests.Services.Data
         [CustomCommandAlias("console", "ConsoleOutput")]
         public void Output(IPlayer player, [CustomCommandRemainingText] string message)
         {
-            Console.Write($"Output 1 {message}");
+            player.SetData($"Output 1 {message}", true);
         }
 
         [CustomCommand("outputCancel")]
         [CancelIfTextIsHello]
         public void OutputCancel(IPlayer player, [CustomCommandRemainingText] string message)
         {
-            Console.Write($"OutputCancel 1 {message}");
+            player.SetData($"OutputCancel 1 {message}", true);
         }
 
         [CustomCommand("output", 1)]
         [CustomCommandAlias("console", "ConsoleOutput")]
         public void Output(IPlayer player, int number, [CustomCommandRemainingText] string message)
         {
-            Console.Write($"Output 2 {number} {message}");
+            player.SetData($"Output 2 {number} {message}", true);
         }
 
         [CustomCommand("output", 2)]
         [CustomCommandAlias("console", "ConsoleOutput")]
         public void Output(IPlayer player, OutputTestModel model)
         {
-            Console.Write($"Output 3 {model.Id} {model.AnyString}");
+            player.SetData($"Output 3 {model.Id} {model.AnyString}", true);
         }
 
         [CustomCommand("output", 1)]
         [CustomCommandAlias("console", "ConsoleOutput")]
-        public void Output()
+        public void Output(IPlayer player)
         {
-            Console.Write("Output empty called");
+            player.SetData("Output empty called", true);
         }
 
         public class OutputTestModel
