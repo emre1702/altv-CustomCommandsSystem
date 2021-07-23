@@ -17,7 +17,7 @@ namespace CustomCommandsSystem.Tests.Services.Parser
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = new ConsoleLogger();
             var config = new CommandsConfiguration();
-            var argumentsConverter = new ArgumentsConverter(config);
+            var argumentsConverter = new ArgumentsConverter(config, logger);
             ICommandsLoader commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
             var methodsParser = new MethodsParser();
             var args = new string[] { "1", "2" };

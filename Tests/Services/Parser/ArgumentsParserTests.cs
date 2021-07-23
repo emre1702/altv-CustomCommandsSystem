@@ -45,8 +45,9 @@ namespace CustomCommandsSystem.Tests.Services.Parser
             var amountDefaultArgs = withCommandInfos ? 2 : 1;
             var player = Substitute.For<IPlayer>();
             var fastMethodInvoker = new FastMethodInvoker();
-            var argumentsConverter = new ArgumentsConverter(new CommandsConfiguration());
-            var methodsLoader = new CommandsLoader(fastMethodInvoker, new ConsoleLogger(), argumentsConverter);
+            var logger = new ConsoleLogger();
+            var argumentsConverter = new ArgumentsConverter(new CommandsConfiguration(), logger);
+            var methodsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
             methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             var commandMethodData = (methodsLoader as ICommandsLoader).GetCommandData("Test3" + withCommandInfos.ToString())!.Methods.First();
             var userArgs = new string[] { "hello", "a", "1", "2.23", "123", "true", "12.412", "423" };

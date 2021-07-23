@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using CustomCommandsSystem.Common.Interfaces.Services;
 using CustomCommandsSystem.Common.Models;
 using CustomCommandsSystem.Services.Parser;
 using CustomCommandsSystem.Services.Utils;
@@ -25,7 +26,8 @@ namespace CustomCommandsSystem.Tests.Services.Parser
         public void OneTimeSetUp()
         {
             var configuration = new CommandsConfiguration();
-            _argumentsConverter = new ArgumentsConverter(configuration);
+            var logger = Substitute.For<ILogger>();
+            _argumentsConverter = new ArgumentsConverter(configuration, logger);
             _player = Substitute.For<IPlayer>();
         }
         

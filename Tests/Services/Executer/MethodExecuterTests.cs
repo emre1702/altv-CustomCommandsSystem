@@ -30,7 +30,7 @@ namespace CustomCommandsSystem.Tests.Services.Executer
             var config = new CommandsConfiguration { RunCommandMethodInMainThread = false };
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = Substitute.For<ILogger>();
-            var argumentsConverter = new ArgumentsConverter(config);
+            var argumentsConverter = new ArgumentsConverter(config, logger);
             _commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
             _commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             _methodParser = new MethodsParser();

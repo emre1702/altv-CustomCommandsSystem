@@ -20,7 +20,7 @@ namespace CustomCommandsSystem.Tests.Services.Loader
             var fastMethodInvoker = new FastMethodInvoker();
             var consoleLogger = new ConsoleLogger();
             var configuration = new CommandsConfiguration();
-            var argumentsConverter = new ArgumentsConverter(configuration);
+            var argumentsConverter = new ArgumentsConverter(configuration, consoleLogger);
             _commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter);
         }
 

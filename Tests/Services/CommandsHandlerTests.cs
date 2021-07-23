@@ -31,9 +31,9 @@ namespace CustomCommandsSystem.Tests.Services
             _configuration = new CommandsConfiguration { RunCommandMethodInMainThread = false };
             var cleaner = new MessageCleaner(_configuration);
             var commandParser = new CommandParser();
-            var argumentsConverter = new ArgumentsConverter(_configuration);
-            var argumentsParser = new ArgumentsParser(argumentsConverter);
             var logger = Substitute.For<ILogger>();
+            var argumentsConverter = new ArgumentsConverter(_configuration, logger);
+            var argumentsParser = new ArgumentsParser(argumentsConverter);
             var fastMethodInvoker = new FastMethodInvoker();
             var commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
             var wrongUsageHandler = new WrongUsageHandler(_configuration);

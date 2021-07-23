@@ -40,7 +40,8 @@ namespace CustomCommandsSystem.Tests.Services.Utils
 
         public string Output_Works(string cmd, string remainingInput, bool addDefaultValues, string nullValueName, UsageOutputType usageOutputType, bool shouldWork)
         {
-            var argumentsConverter = new ArgumentsConverter(_config);
+            var logger = Substitute.For<ILogger>();
+            var argumentsConverter = new ArgumentsConverter(_config, logger);
             var argumentsParser = new ArgumentsParser(argumentsConverter);
             var userArgs = argumentsParser.ParseUserArguments(remainingInput);
             var commandData = GetCommandData(cmd, argumentsConverter);
