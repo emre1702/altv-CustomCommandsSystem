@@ -25,6 +25,9 @@ namespace CustomCommandsSystem.Common.Models
         public int? ExactUserArgsAmount { get; private set; }
         public object? Instance { get; internal set; }
 
+        private readonly Type _playerType = typeof(IPlayer);
+        private readonly Type _customCommandInfoType = typeof(CustomCommandInfo);
+
         public CommandMethodData(MethodInfo method, Delegate fastInvokeHandler, int priority)
         {
             Method = method;
@@ -67,14 +70,14 @@ namespace CustomCommandsSystem.Common.Models
         private bool GetIsPlayerRequired(MethodInfo method)
         {
             var parameters = method.GetParameters();
-            return parameters.Length >= 1 && parameters[0].ParameterType == typeof(IPlayer);
+            return parameters.Length >= 1 && parameters[0].ParameterType.IsAssignableTo(_playerType);
         }
 
         private bool GetIsCommandInfoRequired(MethodInfo method)
         {
             var parameters = method.GetParameters();
-            return parameters.Length >= 1 && parameters[0].ParameterType == typeof(CustomCommandInfo)
-                || parameters.Length >= 2 && parameters[0].ParameterType == typeof(IPlayer) && parameters[1].ParameterType == typeof(CustomCommandInfo);
+            return parameters.Length >= 1 && parameters[0].ParameterType.IsAssignableTo(_customCommandInfoType)
+                || parameters.Length >= 2 && parameters[0].ParameterType.IsAssignableTo(_playerType) && parameters[1].ParameterType.IsAssignableTo(_customCommandInfoType);
         }
     }
 }
