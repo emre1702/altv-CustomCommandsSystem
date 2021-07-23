@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>altV-CustomCommandsSystem</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <title>Custom commands system for alt:V</title>
     <authors>Bonus (emre1702)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,13 +14,15 @@
       Read more about it in the Readme in GitHub.
     </description>
     <releaseNotes>
-      Migrate from RAGE to alt:V
+      1. Allow custom class for IPlayer and CustomCommandInfo (you'll still need to add a new converter for IPlayer!) - thx to insus100
+      2. Add a warning for missing converter
+      3. Update alt:V Version to from 2.0.8 to 4.0.0
     </releaseNotes>
     <tags>altv alt_v alt:v alt alternative GTA GTA5 Commands CustomCommands Bonus</tags>
     <dependencies>
       <group targetFramework="net5.0">
-        <dependency id="AltV.Net" version="2.0.8"/>
-        <dependency id="AltV.Net.Async" version="2.0.8"/>
+        <dependency id="AltV.Net" version="4.0.0"/>
+        <dependency id="AltV.Net.Async" version="4.0.0"/>
         <dependency id="AltV.Net.Resources.Chat.Api" version="1.48.0"/>
         <dependency id="System.Linq.Async" version="5.0.0"/>
         <dependency id="Microsoft.Extensions.DependencyInjection" version="5.0.1"/>
