@@ -19,12 +19,14 @@ namespace CustomCommandsSystem.Services.Parser
         internal static ArgumentsConverter Instance { get; private set; }
 #nullable restore
 
+        private readonly ILogger _logger;
         private readonly Dictionary<Type, (int ArgsLength, bool? AllowNull, AsyncConverterDelegate Converter)> _asyncConverters;
         private readonly Dictionary<Type, (int ArgsLength, bool? AllowNull, ConverterDelegate Converter)> _converters;
         
 
-        public ArgumentsConverter(ICommandsConfiguration config)
+        public ArgumentsConverter(ICommandsConfiguration config, ILogger logger)
         {
+            _logger = logger;
             _converters = DefaultConverters.Data(config);
             _asyncConverters = new();
             Instance = this;
@@ -57,7 +59,11 @@ namespace CustomCommandsSystem.Services.Parser
             lock (_converters)
             {
                 if (!_converters.TryGetValue(toType, out converterData))
+                {
+                    _logger.LogWarning($"Type {toType.FullName} has no converter but is used as a parameter in command '{userInputData.Command}'. See https://github.com/emre1702/altv-CustomCommandsSystem/wiki/Custom-Converters for more information.");
                     return (System.Convert.ChangeType(userInputData.Arguments[atIndex], toType), 1, null);
+                }
+                    
             }
 
             var argsToUse = new ArraySegment<string>(userInputData.Arguments, atIndex, converterData.ArgsLength);
