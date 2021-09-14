@@ -46,7 +46,6 @@ namespace CustomCommandsSystem.Tests.Services.Executer
             var arguments = new string[] { "5", "hallo", "123", "123", "123" };
             var commandData = _commandsLoader.GetCommandData("Test4")!;
             var methods = _methodParser.GetPossibleMethods("Test4", arguments, commandData);
-            var message = string.Empty;
 
             var userInputData = new UserInputData("Test4", "Test4 " + string.Join(' ', arguments), arguments);
             var result = await _methodExecuter.TryExecuteSuitable(player, userInputData, commandData, methods.ToList());

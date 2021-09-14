@@ -80,7 +80,7 @@ namespace CustomCommandsSystem.Services.Parser
                 strBuilder.Append($" [{parameter.Name}");
                 if (_configuration.UsageAddDefaultValues && parameter.HasDefaultValue)
                     strBuilder.Append($" = {(parameter.DefaultValue?.ToString() ?? _configuration.NullDefaultValueName)}");
-                strBuilder.Append("]");
+                strBuilder.Append(']');
             }
         }
     }
