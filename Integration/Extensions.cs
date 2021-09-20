@@ -26,14 +26,17 @@ namespace CustomCommandsSystem.Integration
         ///     So if you have a constructor with parameters in this class, also add one parameterless constructor.
         /// </para>
         ///     <para>2. WARNING:<br/>
-        ///     Creates instances of all classes with atleast one non-static command!<br/>
+        ///     Creates instances of all classes with atleast one non-static command if ServiceProvider is not set in the config!<br/>
         ///     So choose atleast one of these rules:<br/>
         ///     <list type="bullet">
         ///         <item>
         ///             <description>Only use static methods for commands</description>
         ///         </item>
         ///         <item>
-        ///             <description>Don't create any object of a class which has atleast one non-static command</description>
+        ///             <description>Use Dependency Injection to pass custom parameters or create the instance by yourself./description>
+        ///         </item>
+        ///         <item>
+        ///             <description>Don't create any instance of a class which has atleast one non-static command</description>
         ///         </item>
         ///         <item>
         ///             <description>Don't have any code in the parameterless constructor which should only be run once</description>
