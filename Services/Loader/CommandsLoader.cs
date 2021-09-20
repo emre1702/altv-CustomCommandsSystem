@@ -2,6 +2,7 @@
 using CustomCommandsSystem.Common.Interfaces.Services;
 using CustomCommandsSystem.Common.Models;
 using CustomCommandsSystem.Services.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,14 @@ namespace CustomCommandsSystem.Services.Loader
         private readonly FastMethodInvoker _fastMethodInvoker;
         private readonly ILogger _logger;
         private readonly ICommandArgumentsConverter _argumentsConverter;
+        private readonly ICommandsConfiguration _configuration;
 
-        public CommandsLoader(FastMethodInvoker fastMethodInvoker, ILogger logger, ICommandArgumentsConverter argumentsConverter)
+        public CommandsLoader(FastMethodInvoker fastMethodInvoker, ILogger logger, ICommandArgumentsConverter argumentsConverter, ICommandsConfiguration configuration)
         {
             _fastMethodInvoker = fastMethodInvoker;
             _logger = logger;
             _argumentsConverter = argumentsConverter;
+            _configuration = configuration;
 
             Instance = this;
 
@@ -110,27 +113,45 @@ namespace CustomCommandsSystem.Services.Loader
         {
             if (method.IsStatic) return true;
 
-            var instance = GetMethodInstance(method);
+            var instance = GetMethodInstance(method, _configuration.ServiceProviderForInstances);
             if (instance is null)
             {
                 _logger.LogWarning($"Method {method.Name} in class {method.DeclaringType!.FullName} can not be added because " +
-                    $"it's neither static nor an object of the class can be created (e.g. because of missing parameterless constructor or being a static/abstract class.");
+                    $"it's neither static nor an object of the class can be created (e.g. because of missing parameterless constructor or being a static/abstract class)." +
+                    $"If you use Dependency Injection, " + 
+                    (_configuration.ServiceProviderForInstances is null 
+                        ? "you'll have to set \"ServiceProviderForInstances\" in the commands configuration"
+                        : "make sure the class is registered in the service collection and can be created by the service provider."));
                 return false;
             }
             methodData.Instance = instance;
             return true;
         }
 
-        private object? GetMethodInstance(MethodInfo method)
+        internal object? GetMethodInstance(MethodInfo method, IServiceProvider? serviceProvider)
         {
             var classType = method.DeclaringType!;
             if (_instancesPerClass.TryGetValue(classType, out var instance))
                 return instance;
 
-            instance = Activator.CreateInstance(classType);
+            if (serviceProvider is not null)
+                instance = GetMethodInstanceByServiceProvider(classType, serviceProvider);
+            else
+                instance = Activator.CreateInstance(classType);
+
             if (instance is null) return null;
             _instancesPerClass[classType] = instance;
             return instance;
+        }
+
+        private object? GetMethodInstanceByServiceProvider(Type classType, IServiceProvider serviceProvider)
+        {
+            var instance = serviceProvider.GetService(classType);
+            if (instance is not null) return instance;
+
+            if (classType.GetConstructor(Type.EmptyTypes) is not null) return Activator.CreateInstance(classType);
+
+            return null;
         }
 
         private IEnumerable<ParameterInfo> GetUserInputParameters(MethodInfo method, CommandMethodData commandMethodData)

@@ -30,5 +30,7 @@ namespace CustomCommandsSystem.Services.Utils
                     data.Player.SendChatMessage(line);
             });
         };
+
+        public IServiceProvider? ServiceProviderForInstances { get; set; }
     }
 }

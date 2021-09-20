@@ -84,5 +84,11 @@ namespace CustomCommandsSystem.Services.Utils
         ///     Output for default player converter when player could not be found.
         /// </summary>
         string? PlayerNotFoundErrorMessage { get; set; }
+
+        /// <summary>
+        ///     If you are using Dependency Injection, set your ServiceProvider here.
+        ///     This ServiceProvider will be used to create instances of the classes with commands.
+        /// </summary>
+        IServiceProvider? ServiceProviderForInstances { get; set; }
     }
 }

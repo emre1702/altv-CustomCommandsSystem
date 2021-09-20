@@ -64,7 +64,7 @@ namespace CustomCommandsSystem.Tests.Services.Utils
         {
             var fastMethodInvoker = new FastMethodInvoker();
             var consoleLogger = new ConsoleLogger();
-            var commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter);
+            var commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter, _config);
             commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
 
             return ((ICommandsLoader)commandsLoader).GetCommandData(cmd)!;

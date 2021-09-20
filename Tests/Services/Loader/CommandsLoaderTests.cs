@@ -2,6 +2,8 @@
 using CustomCommandsSystem.Services.Loader;
 using CustomCommandsSystem.Services.Parser;
 using CustomCommandsSystem.Services.Utils;
+using CustomCommandsSystem.Tests.Services.Loader.Data;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
@@ -21,7 +23,7 @@ namespace CustomCommandsSystem.Tests.Services.Loader
             var consoleLogger = new ConsoleLogger();
             var configuration = new CommandsConfiguration();
             var argumentsConverter = new ArgumentsConverter(configuration, consoleLogger);
-            _commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter);
+            _commandsLoader = new CommandsLoader(fastMethodInvoker, consoleLogger, argumentsConverter, configuration);
         }
 
         [Test]
@@ -93,6 +95,39 @@ namespace CustomCommandsSystem.Tests.Services.Loader
             Assert.AreEqual(cmdCommandData.Methods.Count, aliasCommandData1.Methods.Count + 1);
             Assert.AreEqual(cmdCommandData.Methods.Count, aliasCommandData2.Methods.Count + 1);
             Assert.AreNotEqual(aliasCommandData1, aliasCommandData2);
+        }
+
+        [Test]
+        public void LoadCommands_CanCreateInstance()
+        {
+            var methodInfo = typeof(ClassWithoutConstructorParameter).GetMethod("TestMethod")!;
+            var instance = _commandsLoader.GetMethodInstance(methodInfo, null) as ClassWithoutConstructorParameter;
+            Assert.IsNotNull(instance);
+            Assert.DoesNotThrow(() => instance!.TestMethod());
+        }
+
+        [Test]
+        public void LoadCommands_CanCreateInstanceWithDependencyInjection()
+        {
+            var methodInfoWithoutParameter = typeof(ClassWithoutConstructorParameter).GetMethod("TestMethod")!;
+            var instanceWithoutParameter = _commandsLoader.GetMethodInstance(methodInfoWithoutParameter, null) as ClassWithoutConstructorParameter;
+
+            var testParameterData = "Test123";
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton<ClassWithConstructorParameter>();
+            serviceCollection.AddSingleton(new TestParameter() { Data = testParameterData });
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var methodInfoWithParameter = typeof(ClassWithConstructorParameter).GetMethod("TestMethod")!;
+            var instanceWithParameter = _commandsLoader.GetMethodInstance(methodInfoWithParameter, serviceProvider) as ClassWithConstructorParameter;
+           
+            Assert.IsNotNull(instanceWithoutParameter, "Can't create instance without parameter.");
+            Assert.DoesNotThrow(() => instanceWithoutParameter!.TestMethod());
+
+            Assert.IsNotNull(instanceWithParameter, "Can't create instance with parameter.");
+            Assert.DoesNotThrow(() => instanceWithParameter!.TestMethod());
+            Assert.IsNotNull(instanceWithParameter!.Parameter);
+            Assert.AreEqual(instanceWithParameter!.Parameter!.Data!, testParameterData);
         }
     }
 }

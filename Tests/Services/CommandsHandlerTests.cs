@@ -35,7 +35,7 @@ namespace CustomCommandsSystem.Tests.Services
             var argumentsConverter = new ArgumentsConverter(_configuration, logger);
             var argumentsParser = new ArgumentsParser(argumentsConverter);
             var fastMethodInvoker = new FastMethodInvoker();
-            var commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
+            var commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter, _configuration);
             var wrongUsageHandler = new WrongUsageHandler(_configuration);
             var methodExecuter = new MethodExecuter(argumentsParser, _configuration, wrongUsageHandler);
             var methodsParser = new MethodsParser();

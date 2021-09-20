@@ -31,7 +31,7 @@ namespace CustomCommandsSystem.Tests.Services.Executer
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = Substitute.For<ILogger>();
             var argumentsConverter = new ArgumentsConverter(config, logger);
-            _commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
+            _commandsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter, config);
             _commandsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             _methodParser = new MethodsParser();
             var argumentsParser = new ArgumentsParser(argumentsConverter);

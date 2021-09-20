@@ -47,7 +47,8 @@ namespace CustomCommandsSystem.Tests.Services.Parser
             var fastMethodInvoker = new FastMethodInvoker();
             var logger = new ConsoleLogger();
             var argumentsConverter = new ArgumentsConverter(new CommandsConfiguration(), logger);
-            var methodsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter);
+            var config = new CommandsConfiguration();
+            var methodsLoader = new CommandsLoader(fastMethodInvoker, logger, argumentsConverter, config);
             methodsLoader.LoadCommands(Assembly.GetExecutingAssembly());
             var commandMethodData = (methodsLoader as ICommandsLoader).GetCommandData("Test3" + withCommandInfos.ToString())!.Methods.First();
             var userArgs = new string[] { "hello", "a", "1", "2.23", "123", "true", "12.412", "423" };
