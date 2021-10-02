@@ -20,6 +20,7 @@
 * Add aliases to command methods
 * Remaining text support
 * Default values for command parameters support  
+* Dependency Injection (Microsoft) support
 * Really fast with IL generated dynamic method
 * You can help decide what to implement next 
   
