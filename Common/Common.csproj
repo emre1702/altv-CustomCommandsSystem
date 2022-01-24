@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="6.0.3" />
-    <PackageReference Include="AltV.Net.Async" Version="6.0.3" />
-    <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.48.0" />
-    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+    <PackageReference Include="AltV.Net" Version="8.0.0" />
+    <PackageReference Include="AltV.Net.Async" Version="8.0.0" />
+    <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="8.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
   </ItemGroup>
 
 </Project>
