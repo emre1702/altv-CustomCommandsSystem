@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>CustomCommandsSystem.Common</AssemblyName>
     <RootNamespace>CustomCommandsSystem.Common</RootNamespace>
     <Nullable>enable</Nullable>
@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AltV.Net" Version="8.0.0" />
-    <PackageReference Include="AltV.Net.Async" Version="8.0.0" />
-    <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="8.0.0" />
-    <PackageReference Include="System.Linq.Async" Version="5.1.0" />
+    <PackageReference Include="AltV.Net" Version="9.0.2" />
+    <PackageReference Include="AltV.Net.Async" Version="9.0.2" />
+    <PackageReference Include="AltV.Net.Resources.Chat.Api" Version="9.0.2" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
 </Project>

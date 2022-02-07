@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>altV-CustomCommandsSystem</id>
-    <version>1.3.4</version>
+    <version>1.3.5</version>
     <title>Custom commands system for alt:V</title>
     <authors>Bonus (emre1702)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,14 +14,14 @@
       Create custom commands in alt:V with C#.
       Read more about it in the Readme in GitHub.
     </description>
-    <releaseNotes>Update packages.</releaseNotes>
+    <releaseNotes>Update to .NET 6 and update packages.</releaseNotes>
     <tags>altv alt_v alt:v alt alternative GTA GTA5 Commands CustomCommands Bonus</tags>
     <dependencies>
-      <group targetFramework="net5.0">
-        <dependency id="AltV.Net" version="8.0.0"/>
-        <dependency id="AltV.Net.Async" version="8.0.0"/>
-        <dependency id="AltV.Net.Resources.Chat.Api" version="8.0.0"/>
-        <dependency id="System.Linq.Async" version="5.1.0"/>
+      <group targetFramework="net6.0">
+        <dependency id="AltV.Net" version="9.0.2"/>
+        <dependency id="AltV.Net.Async" version="9.0.2"/>
+        <dependency id="AltV.Net.Resources.Chat.Api" version="9.0.2"/>
+        <dependency id="System.Linq.Async" version="6.0.1"/>
         <dependency id="Microsoft.Extensions.DependencyInjection" version="6.0.0"/>
       </group>
     </dependencies>
