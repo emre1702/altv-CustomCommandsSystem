@@ -46,27 +46,27 @@ namespace CustomCommandsSystem.Integration
         ///         </item>
         ///     </list></para>
         /// </remarks>
-        public static void RegisterCustomCommands(this IServer core)
+        public static void RegisterCustomCommands(this ICore core)
             => RegisterCustomCommands(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Registers all commands (doesn't matter if private, static, not static etc.) in the specified assembly.
         /// </summary>
-        /// <inheritdoc cref="RegisterCustom(IServer)" path="/remarks"/>
+        /// <inheritdoc cref="RegisterCustom(ICore)" path="/remarks"/>
         /// <param name="assembly"/>
-        public static void RegisterCustomCommands(this IServer _, Assembly assembly)
+        public static void RegisterCustomCommands(this ICore _, Assembly assembly)
             => CommandsLoader.Instance?.LoadCommands(assembly);
 
         /// <summary>
         ///     Unregisters all commands in the current assembly.
         /// </summary>
-        public static void UnregisterCustomCommands(this IServer core)
+        public static void UnregisterCustomCommands(this ICore core)
             => UnregisterCustomCommands(core, Assembly.GetCallingAssembly());
 
         /// <summary>
         ///     Unregisters all commands in the specified assembly.
         /// </summary>
-        public static void UnregisterCustomCommands(this IServer _, Assembly assembly)
+        public static void UnregisterCustomCommands(this ICore _, Assembly assembly)
             => CommandsLoader.Instance?.UnloadCommands(assembly);
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace CustomCommandsSystem.Integration
         ///     To make reference types nullable, enable nullable in your project.<br/>
         ///     Default: false
         /// </param>
-        public static void SetCustomCommandsConverter<T>(this IServer _, int amountArgumentsNeeded, ConverterDelegate converter, bool? allowNull = false)
+        public static void SetCustomCommandsConverter<T>(this ICore _, int amountArgumentsNeeded, ConverterDelegate converter, bool? allowNull = false)
           => ArgumentsConverter.Instance.SetConverter(typeof(T), amountArgumentsNeeded, converter, allowNull);
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace CustomCommandsSystem.Integration
         ///     To make reference types nullable, enable nullable in your project.<br/>
         ///     Default: false
         /// </param>
-        public static void SetCustomCommandsAsyncConverter<T>(this IServer _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter, bool? allowNull = false)
+        public static void SetCustomCommandsAsyncConverter<T>(this ICore _, int amountArgumentsNeeded, AsyncConverterDelegate asyncConverter, bool? allowNull = false)
           => ArgumentsConverter.Instance.SetAsyncConverter(typeof(T), amountArgumentsNeeded, asyncConverter, allowNull);
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace CustomCommandsSystem.Integration
         /// </summary>
         /// <param name="player">Player to be passed to the command methods and to be error messages to.</param>
         /// <param name="command">The command with prefix or without prefix.</param>
-        public static void ExecuteCustomCommand(this IServer _, IPlayer player, string command)
+        public static void ExecuteCustomCommand(this ICore _, IPlayer player, string command)
             => CommandsHandler.Instance?.ExecuteCommand(player, command);
     }
 }
