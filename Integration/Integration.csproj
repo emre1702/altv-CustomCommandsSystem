@@ -7,22 +7,17 @@
     <RootNamespace>CustomCommandsSystem.Integration</RootNamespace>
     <Nullable>enable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>altV-CustomCommandsSystem</PackageId>
-    <PackageVersion>1.3.7</PackageVersion>
-    <Title>altV-CustomCommandsSystem</Title>
-    <Authors>emre1702</Authors>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Core\Core.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Services\Services.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Common\Common.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\Core\Core.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\Services\Services.csproj" PrivateAssets="All"/>
   </ItemGroup>
 
   <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
     <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
     </ItemGroup>
   </Target>
 </Project>
