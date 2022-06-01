@@ -14,13 +14,13 @@
       Create custom commands in alt:V with C#.
       Read more about it in the Readme in GitHub.
     </description>
-    <releaseNotes>Use alt:V dev version (10.0.60-dev)</releaseNotes>
+    <releaseNotes>Use alt:V dev version (11.0.5-dev)</releaseNotes>
     <tags>altv alt_v alt:v alt alternative GTA GTA5 Commands CustomCommands Bonus</tags>
     <dependencies>
       <group targetFramework="net6.0">
-        <dependency id="AltV.Net" version="10.0.60-dev"/>
-        <dependency id="AltV.Net.Async" version="10.0.60-dev"/>
-        <dependency id="AltV.Net.Resources.Chat.Api" version="10.0.60-dev"/>
+        <dependency id="AltV.Net" version="11.0.5-dev"/>
+        <dependency id="AltV.Net.Async" version="11.0.5-dev"/>
+        <dependency id="AltV.Net.Resources.Chat.Api" version="11.0.5-dev"/>
         <dependency id="System.Linq.Async" version="6.0.1"/>
         <dependency id="Microsoft.Extensions.DependencyInjection" version="6.0.0"/>
       </group>
